@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안산 LG유플러스 체인지 페스티벌</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-scroll { display: flex; animation: scroll 20s linear infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans pb-24">
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-1">
+                <div class="w-8 h-8 bg-[#E6007E] rounded-full flex items-center justify-center font-bold text-white italic text-sm">U+</div>
+                <span class="font-bold text-lg">안산 체인지 페스티벌</span>
+            </div>
+            <a href="#consult" class="bg-[#E6007E] text-white px-4 py-2 rounded-full text-sm font-bold">상담신청</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 px-4 bg-gradient-to-b from-[#001D4A] to-[#003580] text-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <div class="inline-block bg-[#E6007E] px-3 py-1 rounded-sm text-xs font-bold mb-4">3월 6일 오늘 정식 런칭!</div>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
+                안산 시민의 새로운 시작,<br><span class="text-[#E6007E]">유플러스</span>가 함께 합니다.
+            </h1>
+            <p class="text-blue-100 mb-8">안산 호수공원 가족 꼼꼼 설계 & 반월공단 근로자 우대</p>
+            <div class="bg-white/10 border border-white/20 rounded-2xl h-64 flex flex-col items-center justify-center p-6 shadow-2xl">
+                <i class="fas fa-mobile-alt text-6xl text-[#E6007E] mb-4"></i>
+                <p class="text-xl font-bold">안산 최대 지원 혜택 적용 중</p>
+                <p class="text-sm opacity-70 mt-2">※ 실장 임시환이 제안하는 안산 단독 혜택</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Section -->
+    <section class="py-12 px-4 max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <i class="fas fa-id-card text-blue-600 text-2xl mb-3"></i>
+                <h3 class="font-bold text-lg">반월공단 사원증 우대</h3>
+                <p class="text-slate-600 text-sm">사원증 인증 시 추가 할인 및 야간 상담 가능</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <i class="fas fa-child text-[#E6007E] text-2xl mb-3"></i>
+                <h3 class="font-bold text-lg">자녀 안심 요금 설계</h3>
+                <p class="text-slate-600 text-sm">우리 아이 첫 폰, 요금 부담 제로 설계</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section id="consult" class="py-12 px-4 bg-white">
+        <div class="max-w-xl mx-auto bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-200">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold mb-2">상담 신청하고 커피 쿠폰 받기</h2>
+                <p class="text-slate-500 text-sm">번호만 남겨주시면 즉시 발송됩니다.</p>
+            </div>
+            <form onsubmit="event.preventDefault(); document.getElementById('success').classList.remove('hidden'); this.classList.add('hidden');">
+                <div class="space-y-4">
+                    <input type="text" placeholder="성함" required class="w-full p-4 rounded-xl border outline-none focus:ring-2 focus:ring-[#E6007E]">
+                    <input type="tel" placeholder="연락처" required class="w-full p-4 rounded-xl border outline-none focus:ring-2 focus:ring-[#E6007E]">
+                    <select class="w-full p-4 rounded-xl border bg-white outline-none focus:ring-2 focus:ring-[#E6007E]">
+                        <option>가장 저렴한 요금제 찾아주세요</option>
+                        <option>주말 방문 예약</option>
+                        <option>신모델 사전예약 사은품 문의</option>
+                    </select>
+                    <button type="submit" class="w-full bg-[#E6007E] text-white py-4 rounded-xl font-bold text-lg shadow-lg">상담 신청하고 혜택 챙기기</button>
+                </div>
+            </form>
+            <div id="success" class="hidden text-center py-8">
+                <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+                <h3 class="text-xl font-bold">신청 완료!</h3>
+                <p class="text-slate-600">커피 쿠폰이 발송되었습니다. 곧 연락드릴게요!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map -->
+    <section class="py-12 px-4 text-center border-t">
+        <h3 class="font-bold mb-4">매장 위치: 안산 상록롯데마트점 1층</h3>
+        <p class="text-slate-500 text-sm">실장 임시환 | 상담문의: 010-XXXX-XXXX</p>
+    </section>
+
+    <!-- Floating Footer -->
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t p-3 flex gap-2 z-50">
+        <a href="javascript:void(0)" class="flex-1 border-2 border-[#E6007E] text-[#E6007E] py-3 rounded-xl font-bold text-center"><i class="fas fa-comment"></i> 카톡 상담</a>
+        <a href="tel:01000000000" class="flex-1 bg-[#E6007E] text-white py-3 rounded-xl font-bold text-center"><i class="fas fa-phone"></i> 바로 전화하기</a>
+    </div>
+
+</body>
+</html>

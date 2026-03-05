@@ -5,94 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>안산 LG유플러스 체인지 페스티벌</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(decodeURIComponent(escape(atob('eyJhYmlrZXkiOiIiLCJhdXRoRG9tYWluIjoiIiwicHJvamVjdElkIjoiIiwic3RvcmFnZUJ1Y2tldCI6IiIsIm1lc3NhZ2luZ1NlbmRlcklkIjoiIiwiYXBwSWQiOiIifQ==')))); 
+        // Note: The above is a placeholder. The environment provides the actual config via __firebase_config.
+        const actualConfig = JSON.parse(window.__firebase_config || '{}');
+        const app = initializeApp(actualConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = window.__app_id || 'ansan-uplus-festival';
+
+        // 1. 익명 인증 (데이터 저장을 위해 필수)
+        async function initApp() {
+            try {
+                await signInAnonymously(auth);
+                console.log("인증 성공");
+            } catch (error) {
+                console.error("인증 실패", error);
+            }
+        }
+        initApp();
+
+        // 2. 고객 상담 신청 저장 함수
+        window.submitConsultation = async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const type = document.getElementById('consult-type').value;
+
+            if (!auth.currentUser) return;
+
+            try {
+                // RULE 1 준수: 지정된 경로에 저장
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'leads'), {
+                    name,
+                    phone,
+                    type,
+                    createdAt: serverTimestamp()
+                });
+                
+                document.getElementById('consult-form').classList.add('hidden');
+                document.getElementById('success-msg').classList.remove('hidden');
+            } catch (e) {
+                alert("오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        }
+
+        // 3. 관리자 명단 확인 기능 (실장님 전용)
+        window.toggleAdmin = function() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) {
+                loadLeads();
+            }
+        }
+
+        function loadLeads() {
+            const q = collection(db, 'artifacts', appId, 'public', 'data', 'leads');
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('leads-list');
+                list.innerHTML = '';
+                const docs = snapshot.docs.map(doc => doc.data());
+                // 최신순 정렬
+                docs.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
+                
+                docs.forEach(data => {
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-3 rounded-lg mb-2 shadow-sm border-l-4 border-[#E6007E]";
+                    div.innerHTML = `
+                        <div class="flex justify-between font-bold text-sm">
+                            <span>${data.name}</span>
+                            <span class="text-xs text-slate-400">${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString() : ''}</span>
+                        </div>
+                        <div class="text-[#E6007E] font-bold">${data.phone}</div>
+                        <div class="text-xs text-slate-500">${data.type}</div>
+                    `;
+                    list.appendChild(div);
+                });
+            }, (error) => {
+                console.error("명단 로드 실패", error);
+            });
+        }
+    </script>
     <style>
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-scroll { display: flex; animation: scroll 20s linear infinite; }
+        .magenta-btn { background-color: #E6007E; transition: transform 0.2s; }
+        .magenta-btn:active { transform: scale(0.95); }
+        .bg-ansan { background-color: #001D4A; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans pb-24">
+<body class="bg-slate-50 font-sans text-slate-900 overflow-x-hidden">
 
     <!-- Header -->
-    <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm">
-        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-1">
-                <div class="w-8 h-8 bg-[#E6007E] rounded-full flex items-center justify-center font-bold text-white italic text-sm">U+</div>
-                <span class="font-bold text-lg">안산 체인지 페스티벌</span>
-            </div>
-            <a href="#consult" class="bg-[#E6007E] text-white px-4 py-2 rounded-full text-sm font-bold">상담신청</a>
+    <nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 magenta-btn rounded-full flex items-center justify-center font-bold text-white italic text-xs">U+</div>
+            <span class="font-bold text-lg tracking-tighter">안산 체인지 페스티벌</span>
         </div>
-    </header>
+        <button onclick="toggleAdmin()" class="text-slate-300"><i class="fas fa-lock text-xs"></i></button>
+    </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-24 pb-12 px-4 bg-gradient-to-b from-[#001D4A] to-[#003580] text-white text-center">
-        <div class="max-w-4xl mx-auto">
-            <div class="inline-block bg-[#E6007E] px-3 py-1 rounded-sm text-xs font-bold mb-4">3월 6일 오늘 정식 런칭!</div>
-            <h1 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
-                안산 시민의 새로운 시작,<br><span class="text-[#E6007E]">유플러스</span>가 함께 합니다.
-            </h1>
-            <p class="text-blue-100 mb-8">안산 호수공원 가족 꼼꼼 설계 & 반월공단 근로자 우대</p>
-            <div class="bg-white/10 border border-white/20 rounded-2xl h-64 flex flex-col items-center justify-center p-6 shadow-2xl">
-                <i class="fas fa-mobile-alt text-6xl text-[#E6007E] mb-4"></i>
-                <p class="text-xl font-bold">안산 최대 지원 혜택 적용 중</p>
-                <p class="text-sm opacity-70 mt-2">※ 실장 임시환이 제안하는 안산 단독 혜택</p>
+    <!-- Main Content -->
+    <main class="pt-16 pb-24">
+        <!-- Hero Section -->
+        <section class="bg-ansan text-white py-12 px-6 text-center">
+            <div class="inline-block border border-white/30 rounded-full px-4 py-1 text-xs mb-4 opacity-80">안산 시민을 위한 특별 혜택</div>
+            <h1 class="text-3xl font-extrabold mb-4 leading-tight">안산 시민의 새로운 시작,<br><span class="text-[#E6007E]">유플러스</span>가 함께 합니다.</h1>
+            <p class="text-blue-200 text-sm mb-6">반월공단 근로자 우대 및 자녀 요금제 꼼꼼 설계</p>
+            <div class="bg-white/5 rounded-2xl p-6 border border-white/10 shadow-inner">
+                <i class="fas fa-mobile-alt text-5xl text-[#E6007E] mb-4"></i>
+                <p class="text-lg font-bold">안산 최대 지원 혜택 적용 중</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Target Section -->
-    <section class="py-12 px-4 max-w-4xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-4">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <i class="fas fa-id-card text-blue-600 text-2xl mb-3"></i>
-                <h3 class="font-bold text-lg">반월공단 사원증 우대</h3>
-                <p class="text-slate-600 text-sm">사원증 인증 시 추가 할인 및 야간 상담 가능</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <i class="fas fa-child text-[#E6007E] text-2xl mb-3"></i>
-                <h3 class="font-bold text-lg">자녀 안심 요금 설계</h3>
-                <p class="text-slate-600 text-sm">우리 아이 첫 폰, 요금 부담 제로 설계</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Form Section -->
-    <section id="consult" class="py-12 px-4 bg-white">
-        <div class="max-w-xl mx-auto bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-200">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold mb-2">상담 신청하고 커피 쿠폰 받기</h2>
-                <p class="text-slate-500 text-sm">번호만 남겨주시면 즉시 발송됩니다.</p>
-            </div>
-            <form onsubmit="event.preventDefault(); document.getElementById('success').classList.remove('hidden'); this.classList.add('hidden');">
-                <div class="space-y-4">
-                    <input type="text" placeholder="성함" required class="w-full p-4 rounded-xl border outline-none focus:ring-2 focus:ring-[#E6007E]">
-                    <input type="tel" placeholder="연락처" required class="w-full p-4 rounded-xl border outline-none focus:ring-2 focus:ring-[#E6007E]">
-                    <select class="w-full p-4 rounded-xl border bg-white outline-none focus:ring-2 focus:ring-[#E6007E]">
-                        <option>가장 저렴한 요금제 찾아주세요</option>
-                        <option>주말 방문 예약</option>
-                        <option>신모델 사전예약 사은품 문의</option>
-                    </select>
-                    <button type="submit" class="w-full bg-[#E6007E] text-white py-4 rounded-xl font-bold text-lg shadow-lg">상담 신청하고 혜택 챙기기</button>
+        <!-- Form Section -->
+        <section id="consult" class="px-6 py-12">
+            <div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
+                <div id="consult-form">
+                    <h2 class="text-2xl font-bold text-center mb-2">상담 신청 명단 등록</h2>
+                    <p class="text-center text-slate-500 text-sm mb-8">지금 신청하고 커피 쿠폰 즉시 받으세요!</p>
+                    
+                    <form onsubmit="submitConsultation(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1 ml-1">성함</label>
+                            <input id="name" type="text" placeholder="성함 입력" required class="w-full bg-slate-50 p-4 rounded-xl border-none outline-none focus:ring-2 focus:ring-[#E6007E]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1 ml-1">연락처</label>
+                            <input id="phone" type="tel" placeholder="010-0000-0000" required class="w-full bg-slate-50 p-4 rounded-xl border-none outline-none focus:ring-2 focus:ring-[#E6007E]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1 ml-1">상담 내용</label>
+                            <select id="consult-type" class="w-full bg-slate-50 p-4 rounded-xl border-none outline-none focus:ring-2 focus:ring-[#E6007E]">
+                                <option>가장 저렴한 요금제 찾아주세요</option>
+                                <option>반월공단 사원증 추가 할인 문의</option>
+                                <option>우리 아이 첫 스마트폰 상담</option>
+                                <option>주말 매장 방문 예약</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full magenta-btn text-white font-bold py-5 rounded-2xl text-lg shadow-lg shadow-pink-200 mt-4">
+                            상담 신청하고 혜택 챙기기
+                        </button>
+                    </form>
                 </div>
-            </form>
-            <div id="success" class="hidden text-center py-8">
-                <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
-                <h3 class="text-xl font-bold">신청 완료!</h3>
-                <p class="text-slate-600">커피 쿠폰이 발송되었습니다. 곧 연락드릴게요!</p>
+
+                <!-- Success Message -->
+                <div id="success-msg" class="hidden text-center py-10">
+                    <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-check text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">신청 완료!</h3>
+                    <p class="text-slate-500 mb-6">임시환 실장이 곧 연락드려<br>최고의 혜택을 설계해 드리겠습니다.</p>
+                    <div class="bg-blue-50 p-4 rounded-xl text-blue-600 text-sm font-bold">
+                        ☕ 커피 쿠폰이 발송되었습니다!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Info -->
+        <section class="text-center px-6 py-8">
+            <p class="font-bold text-slate-800 mb-1">매장: 안산 상록롯데마트점 1층</p>
+            <p class="text-slate-400 text-xs tracking-widest">안산 소매 MC 실장 임시환</p>
+        </section>
+    </main>
+
+    <!-- Admin Panel (Hidden) -->
+    <div id="admin-panel" class="hidden fixed inset-0 z-[60] bg-slate-900/95 p-6 overflow-y-auto">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-center mb-6 text-white">
+                <h2 class="text-xl font-bold font-white"><i class="fas fa-list-ul mr-2"></i> 실시간 신청 명단</h2>
+                <button onclick="toggleAdmin()" class="bg-white/10 p-2 rounded-full w-10 h-10 flex items-center justify-center"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="leads-list">
+                <!-- Data will be loaded here -->
             </div>
         </div>
-    </section>
-
-    <!-- Map -->
-    <section class="py-12 px-4 text-center border-t">
-        <h3 class="font-bold mb-4">매장 위치: 안산 상록롯데마트점 1층</h3>
-        <p class="text-slate-500 text-sm">실장 임시환 | 상담문의: 010-XXXX-XXXX</p>
-    </section>
+    </div>
 
     <!-- Floating Footer -->
-    <div class="fixed bottom-0 left-0 w-full bg-white border-t p-3 flex gap-2 z-50">
-        <a href="javascript:void(0)" class="flex-1 border-2 border-[#E6007E] text-[#E6007E] py-3 rounded-xl font-bold text-center"><i class="fas fa-comment"></i> 카톡 상담</a>
-        <a href="tel:01000000000" class="flex-1 bg-[#E6007E] text-white py-3 rounded-xl font-bold text-center"><i class="fas fa-phone"></i> 바로 전화하기</a>
+    <div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t p-3 flex gap-2 z-50">
+        <a href="tel:01000000000" class="flex-1 magenta-btn text-white py-4 rounded-2xl font-bold text-center flex items-center justify-center gap-2 shadow-xl shadow-pink-100">
+            <i class="fas fa-phone"></i> 실장님 바로 연결
+        </a>
     </div>
 
 </body>

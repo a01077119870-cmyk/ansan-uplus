@@ -80,7 +80,7 @@
 </head>
 <body class="text-slate-900 pb-24 text-left">
 
-    <!-- [고정] 1. 게이트웨이 -->
+    <!-- 1. 게이트웨이 -->
     <div id="gateway" class="fixed inset-0 z-[700] flex flex-col items-center justify-center p-6 transition-all duration-700 bg-white overflow-hidden text-center">
         <video autoplay loop muted playsinline webkit-playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-80 bg-slate-100 accelerated">
             <source src="bg_video.mp4" id="master-bg-video" type="video/mp4">
@@ -91,10 +91,10 @@
         <div class="max-w-4xl w-full flex flex-col items-center relative z-10"> 
             
             <!-- [🔥 Apply] 원본 이미지 파일 연동 (대문 로고) -->
-            <!-- * 파일명 logo.jpg.jfif 적용 완료 + 하얀 배경 누끼 효과(mix-blend-multiply) 추가 * -->
+            <!-- * 파일명 logo.png.png 적용 완료 + 하얀 배경 누끼 효과(mix-blend-multiply) 유지 * -->
             <div class="mb-24 md:mb-32 animate-pulse-soft w-full flex justify-center relative -top-6 md:-top-10">
                 <div class="flex items-baseline justify-center gap-3 drop-shadow-lg">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-14 md:h-20 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/350x120/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.png.png" alt="Simply. U+" class="h-14 md:h-20 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/350x120/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-2xl md:text-4xl" style="position:relative; top:-2px;">다이렉트</span>
                 </div>
             </div>
@@ -119,14 +119,14 @@
         </div>
     </div>
 
-    <!-- [고정] 2. 메인 컨텐츠 영역 -->
+    <!-- 2. 메인 컨텐츠 영역 -->
     <div id="main-content" class="hidden opacity-0 transition-opacity duration-700 bg-white">
         
         <header class="fixed top-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-100 h-16 px-5 flex items-center justify-between z-[500]">
             <div class="flex items-center gap-6 md:gap-10">
-                <!-- [🔥 Apply] 상단 헤더 원본 이미지 로고 (+ 누끼 효과) -->
+                <!-- [🔥 Apply] 상단 헤더 원본 이미지 로고 (logo.png.png 적용) -->
                 <div onclick="location.reload()" class="flex items-baseline cursor-pointer active:scale-95 transition-transform gap-1.5" style="width: auto;">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-6 md:h-7 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/150x50/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.png.png" alt="Simply. U+" class="h-6 md:h-7 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/150x50/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-sm font-bold">다이렉트</span>
                 </div>
                 <nav class="hidden md:flex gap-8 text-[11px] font-black uppercase tracking-widest text-slate-500">
@@ -141,9 +141,9 @@
         <!-- 모바일 메뉴 -->
         <div id="mobile-menu" class="fixed inset-0 bg-white flex flex-col p-10 hidden z-[600] text-left shadow-2xl">
             <div class="flex justify-between items-center mb-16">
-                <!-- [🔥 Apply] 모바일 메뉴 원본 이미지 로고 (+ 누끼 효과) -->
+                <!-- [🔥 Apply] 모바일 메뉴 원본 이미지 로고 (logo.png.png 적용) -->
                 <div class="flex items-baseline justify-start gap-2">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-8 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/180x60/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.png.png" alt="Simply. U+" class="h-8 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/180x60/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-lg font-bold">다이렉트</span>
                 </div>
                 <button onclick="toggleMobileMenu()" class="text-slate-900 text-3xl"><i class="fas fa-times"></i></button>
@@ -158,7 +158,7 @@
             </div>
         </div>
 
-        <!-- [고정] 3. 무한 루프 배너 슬라이더 -->
+        <!-- 무한 루프 배너 슬라이더 -->
         <section class="relative h-[480px] md:h-[720px] mt-16 overflow-hidden bg-white" id="slider-root">
             <div class="slider-wrapper accelerated" id="main-slider">
                 <div class="main-slide px-6 bg-teal-50" id="clone-last"></div> 
@@ -211,7 +211,7 @@
             <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2" id="slider-dots"></div>
         </section>
 
-        <!-- [고정] 4. 베스트셀러 (S26 울트라 1번 고정) -->
+        <!-- 베스트셀러 -->
         <section id="devices" class="py-24 px-4 md:px-5 bg-white text-center">
             <div class="max-w-6xl mx-auto">
                 <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-10 tracking-tight leading-tight w-full">기기 추천 리스트</h2>
@@ -224,7 +224,7 @@
             </div>
         </section>
 
-        <!-- [고정] 5. 매장 네트워크 -->
+        <!-- 매장 네트워크 -->
         <section id="store-guide" class="py-24 px-4 bg-slate-50 border-y border-slate-200 relative z-20 text-left">
             <div class="max-w-6xl mx-auto">
                 <h2 class="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900 uppercase font-sans italic"> 거점 매장 <span class="text-blue-600">Network</span></h2>
@@ -248,7 +248,7 @@
             </div>
         </section>
 
-        <!-- [고정] 6. 상담 신청 -->
+        <!-- 상담 신청 -->
         <section id="consult" class="py-24 px-5 bg-white text-center">
             <h2 class="text-4xl md:text-7xl font-black mb-6 tracking-tighter text-slate-900 uppercase italic leading-none">Simply<span class="text-magenta">.</span> 상담신청</h2>
             <form onsubmit="handleFinalConsult(event)" class="max-w-md mx-auto space-y-4 text-left mt-10">
@@ -258,7 +258,7 @@
             </form>
         </section>
 
-        <!-- [고정] 7. 공식 푸터 -->
+        <!-- 공식 푸터 -->
         <footer class="bg-[#1a1a18] text-[#888] py-14 px-5 relative z-20 text-left border-t border-white/5">
             <div class="max-w-6xl mx-auto">
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-8 text-[12px] font-bold text-white/90">
@@ -292,7 +292,7 @@
         </div>
     </div>
 
-    <!-- [고정] 완벽 복구된 상세 모달 (동시 스크롤 및 24/36개월 요금 연동) -->
+    <!-- 상세 모달 -->
     <div id="specModal" class="modal-overlay accelerated" onclick="closeModal()">
         <div class="modal-content relative animate-up text-left flex flex-col w-full max-h-[90vh]" onclick="event.stopPropagation()">
             

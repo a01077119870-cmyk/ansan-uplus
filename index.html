@@ -91,10 +91,10 @@
         <div class="max-w-4xl w-full flex flex-col items-center relative z-10"> 
             
             <!-- [🔥 Apply] 원본 이미지 파일 연동 (대문 로고) -->
-            <!-- * 파일명 logo.jpg.jfif 적용 완료 * -->
+            <!-- * 파일명 logo.jpg.jfif 적용 완료 + 하얀 배경 누끼 효과(mix-blend-multiply) 추가 * -->
             <div class="mb-24 md:mb-32 animate-pulse-soft w-full flex justify-center relative -top-6 md:-top-10">
                 <div class="flex items-baseline justify-center gap-3 drop-shadow-lg">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-14 md:h-20 object-contain" onerror="this.src='https://via.placeholder.com/350x120/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-14 md:h-20 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/350x120/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-2xl md:text-4xl" style="position:relative; top:-2px;">다이렉트</span>
                 </div>
             </div>
@@ -124,9 +124,9 @@
         
         <header class="fixed top-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-100 h-16 px-5 flex items-center justify-between z-[500]">
             <div class="flex items-center gap-6 md:gap-10">
-                <!-- [🔥 Apply] 상단 헤더 원본 이미지 로고 -->
+                <!-- [🔥 Apply] 상단 헤더 원본 이미지 로고 (+ 누끼 효과) -->
                 <div onclick="location.reload()" class="flex items-baseline cursor-pointer active:scale-95 transition-transform gap-1.5" style="width: auto;">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-6 md:h-7 object-contain" onerror="this.src='https://via.placeholder.com/150x50/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-6 md:h-7 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/150x50/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-sm font-bold">다이렉트</span>
                 </div>
                 <nav class="hidden md:flex gap-8 text-[11px] font-black uppercase tracking-widest text-slate-500">
@@ -141,9 +141,9 @@
         <!-- 모바일 메뉴 -->
         <div id="mobile-menu" class="fixed inset-0 bg-white flex flex-col p-10 hidden z-[600] text-left shadow-2xl">
             <div class="flex justify-between items-center mb-16">
-                <!-- [🔥 Apply] 모바일 메뉴 원본 이미지 로고 -->
+                <!-- [🔥 Apply] 모바일 메뉴 원본 이미지 로고 (+ 누끼 효과) -->
                 <div class="flex items-baseline justify-start gap-2">
-                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-8 object-contain" onerror="this.src='https://via.placeholder.com/180x60/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-8 object-contain mix-blend-multiply" onerror="this.src='https://via.placeholder.com/180x60/ffffff/FF00A0?text=Simply.+U%2B'">
                     <span class="simply-direct text-lg font-bold">다이렉트</span>
                 </div>
                 <button onclick="toggleMobileMenu()" class="text-slate-900 text-3xl"><i class="fas fa-times"></i></button>

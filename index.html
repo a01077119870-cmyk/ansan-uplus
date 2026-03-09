@@ -2,339 +2,674 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>프리미엄 다이렉트 SHOP | 수도권 통합 상담센터</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simply U+ 다이렉트 | 공식 상담센터</title>
+    
+    <!-- [Optimization] 리소스 사전 연결 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
         
-        /* 기본 스타일 및 초기화 */
-        body { font-family: 'Noto Sans KR', sans-serif; scroll-behavior: smooth; background-color: #000000; }
+        body { font-family: 'Noto Sans KR', sans-serif; scroll-behavior: smooth; background-color: #FFFFFF; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* 브랜드 테마 컬러 - 브라이트 핑크 (#FF00A0) */
-        :root {
-            --uplus-magenta: #FF00A0;
-            --uplus-blue: #0056FF;
+        :root { 
+            --uplus-magenta: #FF00A0; 
+            --uplus-violet: #8A3FFC;
+            --navy-deep: #0f172a;
         }
+
         .text-magenta { color: var(--uplus-magenta); }
         .bg-magenta { background-color: var(--uplus-magenta); }
-        .border-magenta { border-color: var(--uplus-magenta); }
-        .magenta-gradient { background: linear-gradient(135deg, #FF00A0 0%, #FF66C4 100%); }
         
-        /* UI 컴포넌트 공통 스타일 */
-        .uplus-card { background: #FFFFFF; border-radius: 2.5rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .uplus-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px -12px rgba(255, 0, 160, 0.2); }
-        .modal-bg { background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); }
+        /* [Performance] GPU 가속 적용 */
+        .accelerated { transform: translate3d(0, 0, 0); backface-visibility: hidden; perspective: 1000px; }
+        @keyframes pulse-soft { 0%, 100% { opacity: 1; transform: translate3d(0,0,0); } 50% { opacity: 0.7; transform: translate3d(0,0,0); } }
+        .animate-pulse-soft { animation: pulse-soft 3s infinite; will-change: opacity; }
+        @keyframes slide-up { from { transform: translate3d(0, 20px, 0); opacity: 0; } to { transform: translate3d(0, 0, 0); opacity: 1; } }
+        .animate-up { animation: slide-up 0.4s ease-out forwards; will-change: transform, opacity; }
+
+        /* [푸터 전용] 하단 까만 영역용 화이트 로고 클래스 유지 */
+        .simply-logo-container { display: flex; align-items: baseline; justify-content: center; gap: 4px; white-space: nowrap; flex-wrap: nowrap; }
+        .simply-text-main { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-right: 0.05em; }
+        .simply-u-svg { height: 0.74em; margin-left: 0.02em; transform: translateY(0.02em); flex-shrink: 0; }
         
-        /* 슬라이더 애니메이션 시스템 */
-        .slider-container { overflow: hidden; position: relative; width: 100%; }
-        .slider-wrapper { display: flex; transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); width: 100%; }
-        .slide { min-width: 100%; position: relative; }
-        @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .animate-pulse-soft { animation: pulse-soft 3s infinite; }
-
-        .dot { width: 10px; height: 10px; background-color: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 5px; transition: all 0.3s; cursor: pointer; }
-        .dot.active { width: 30px; background-color: var(--uplus-magenta); border-radius: 10px; }
-
-        /* 로고 시스템 - 정중앙 정렬 및 묵직한 두께감 설정 */
-        .simply-logo-container { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 12px; 
-            width: 100%; 
+        /* 다이렉트 텍스트 폰트 설정 (이미지 옆에 붙는 용도) */
+        .simply-direct { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            font-weight: 300; 
+            color: #4B5563; 
+            letter-spacing: -1px; 
+            white-space: nowrap;
         }
-        .simply-text-main { font-family: sans-serif; font-weight: 600; color: #ffffff; letter-spacing: -1.2px; }
-        .simply-u-main { font-family: sans-serif; font-weight: 800; color: var(--uplus-magenta); letter-spacing: -1.5px; }
 
-        /* 모바일 메뉴 시스템 */
-        #mobile-menu { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        #mobile-menu.open { transform: translateX(0); }
+        /* 무한루프 슬라이더 시스템 */
+        .slider-root { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
+        .slider-wrapper { display: flex; height: 100%; width: 700%; will-change: transform; transform: translate3d(-14.285%, 0, 0); }
+        .main-slide { width: 14.285%; height: 100%; position: relative; display: flex; align-items: center; flex-shrink: 0; transform: translate3d(0,0,0); }
+
+        /* 디바이스 카드 디자인 */
+        .uplus-official-card { 
+            background: #FFFFFF; border-radius: 1.5rem; border: 1px solid #E5E7EB; 
+            padding: 1.5rem 1rem; transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.3s ease; position: relative;
+            display: flex; flex-direction: column; height: 100%; will-change: transform;
+        }
+        @media (min-width: 1024px) { .uplus-official-card { padding: 2.5rem 2rem; border-radius: 2rem; } }
+        .uplus-official-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--uplus-magenta); transform: translate3d(0, -5px, 0); }
+
+        .badge-new { background-color: var(--uplus-violet); color: white; padding: 2px 6px; font-size: 10px; font-weight: 800; border-radius: 4px; position: absolute; top: 15px; left: 15px; z-index: 10; }
+        .tab-btn { font-weight: 500; color: #6B7280; padding: 8px 16px; position: relative; transition: all 0.2s; cursor: pointer; }
+        .tab-btn.active { color: #111827; font-weight: 800; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 50%; transform: translate3d(-50%, 0, 0); width: 20px; height: 2px; background-color: #111827; }
+        .order-btn { border: 1.5px solid #E5E7EB; border-radius: 1rem; transition: all 0.2s ease; cursor: pointer; background: white; color: #9CA3AF; font-weight: 700; text-align: center; }
+        .order-btn.active { border: 2.5px solid var(--uplus-magenta); background-color: #FFF0F9; color: #000000; }
+        
+        /* 모달 시스템 */
+        .modal-overlay { background-color: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 1000; position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+        .modal-content { background: white; width: 100%; max-width: 1100px; border-radius: 2.5rem; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        .modal-content-call { background: white; width: 100%; max-width: 450px; border-radius: 2.5rem; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
+        .thumb-item { border: 1.5px solid #E5E7EB; transition: all 0.3s; cursor: pointer; border-radius: 0.75rem; overflow: hidden; padding: 2px; background: white; width: 3.5rem; height: 3.5rem; flex-shrink: 0; }
+        .thumb-item.active { border-color: var(--uplus-magenta); transform: scale(1.1); box-shadow: 0 4px 15px rgba(255, 0, 160, 0.2); }
     </style>
 </head>
-<body class="text-slate-100 pb-24 overflow-x-hidden text-left">
+<body class="text-slate-900 pb-24 text-left">
 
-    <!-- [Step 1] 게이트웨이 (대문 페이지) -->
-    <div id="gateway" class="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center p-6 transition-opacity duration-700 text-center">
-        <div class="max-w-md w-full flex flex-col items-center"> 
+    <!-- [고정] 1. 게이트웨이 -->
+    <div id="gateway" class="fixed inset-0 z-[700] flex flex-col items-center justify-center p-6 transition-all duration-700 bg-white overflow-hidden text-center">
+        <video autoplay loop muted playsinline webkit-playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-80 bg-slate-100 accelerated">
+            <source src="bg_video.mp4" id="master-bg-video" type="video/mp4">
+            <source src="https://cdn.pixabay.com/video/2021/08/04/83866-584746682_large.mp4" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-white/60 backdrop-blur-[8px] z-0 pointer-events-none"></div>
+
+        <div class="max-w-4xl w-full flex flex-col items-center relative z-10"> 
             
-            <!-- Simply U+ 로고 (정중앙) -->
-            <div class="mb-14 animate-pulse-soft w-full">
-                <div class="simply-logo-container">
-                    <span class="simply-text-main text-4xl md:text-5xl">Simply</span>
-                    <span class="simply-u-main text-4xl md:text-5xl">U+</span>
-                </div>
-            </div>
-            
-            <!-- 요청하신 "프리미엄 다이렉트 SHOP" 및 "수도권 통합 센터" 묵직한 폰트 적용 -->
-            <div class="mb-12">
-                <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase leading-none mb-2">
-                    프리미엄
-                </h1>
-                <h2 class="text-magenta italic font-sans text-5xl md:text-6xl font-black tracking-tighter mb-6">
-                    다이렉트 SHOP
-                </h2>
-                <div class="w-16 h-1.5 bg-magenta mx-auto mb-6 rounded-full"></div>
-                <p class="text-white text-xl md:text-2xl font-black tracking-tight uppercase">
-                    수도권 통합 센터
-                </p>
-                <p class="text-slate-600 text-[10px] mt-4 font-bold tracking-[0.5em] uppercase font-sans opacity-60">Metropolitan Integration Network</p>
-            </div>
-
-            <!-- 확인 절차 카드 -->
-            <div id="check-step-1" class="w-full bg-[#111] p-8 rounded-[3rem] border border-white/5 shadow-2xl">
-                <p class="font-bold text-slate-500 mb-8 flex items-center justify-center gap-2 text-xs uppercase tracking-widest font-sans text-center border-b border-white/5 pb-4">Identity Verification</p>
-                <div class="space-y-4">
-                    <button onclick="nextStep()" class="w-full py-6 magenta-gradient text-white rounded-2xl font-black text-xl shadow-2xl active:scale-95 transition-transform">만 19세 이상 입장하기</button>
-                    <button onclick="alert('미성년자는 법정대리인과 함께 매장 방문 시 상담이 가능합니다.')" class="w-full py-4 text-slate-700 font-bold text-sm text-center">만 19세 미만입니다</button>
+            <!-- [🔥 Apply] 원본 이미지 파일 연동 (대문 로고) -->
+            <!-- * 파일명 logo.jpg.jfif 적용 완료 * -->
+            <div class="mb-24 md:mb-32 animate-pulse-soft w-full flex justify-center relative -top-6 md:-top-10">
+                <div class="flex items-baseline justify-center gap-3 drop-shadow-lg">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-14 md:h-20 object-contain" onerror="this.src='https://via.placeholder.com/350x120/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <span class="simply-direct text-2xl md:text-4xl" style="position:relative; top:-2px;">다이렉트</span>
                 </div>
             </div>
 
-            <div id="check-step-2" class="hidden w-full bg-[#111] p-8 rounded-[3rem] border border-white/5 shadow-2xl scale-95 animate-in zoom-in duration-300">
-                <p class="font-black text-magenta mb-2 text-lg italic uppercase font-sans">Security Check</p>
-                <p class="text-slate-400 mb-8 font-medium italic">"임시환 실장의 매장은 어디에 있나요?"</p>
-                <div class="grid grid-cols-2 gap-3 text-sm">
-                    <button onclick="alert('다시 확인해주세요!')" class="py-5 bg-white/5 border border-white/10 rounded-2xl font-bold text-slate-400 hover:bg-white/10">홈플러스</button>
-                    <button onclick="enterSite()" class="py-5 border-2 border-[#FF00A0] rounded-2xl font-black text-magenta shadow-lg">롯데마트</button>
-                    <button onclick="alert('다시 확인해주세요!')" class="py-5 bg-white/5 border border-white/10 rounded-2xl font-bold text-slate-400 hover:bg-white/10">이마트</button>
-                    <button onclick="alert('다시 확인해주세요!')" class="py-5 bg-white/5 border border-white/10 rounded-2xl font-bold text-slate-400 hover:bg-white/10">농협마트</button>
+            <!-- 서비스 슬로건 -->
+            <div class="mb-16 w-full animate-up flex justify-center" style="animation-delay: 0.2s;">
+                <div class="inline-flex items-center gap-3 px-8 py-5 bg-slate-900/90 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl">
+                    <i class="fas fa-check-circle text-magenta text-lg"></i>
+                    <p class="text-white text-base md:text-xl font-bold tracking-tighter">
+                        전 지역 <span class="text-magenta animate-pulse inline-block">광속 배송</span> & <span class="text-magenta animate-pulse inline-block" style="animation-delay: 0.5s;">방문 세팅</span> 서비스
+                    </p>
                 </div>
+            </div>
+
+            <!-- 입장 버튼 -->
+            <div class="relative z-10 flex flex-col items-center w-full max-w-[320px] animate-up" style="animation-delay: 0.4s;">
+                <p class="font-bold text-slate-600 mb-6 text-xs uppercase tracking-widest text-center w-full">Official Access Only</p>
+                <button onclick="enterSite()" class="group w-full py-6 bg-slate-900 text-white rounded-full font-black text-2xl shadow-2xl hover:bg-black active:scale-95 transition-transform flex items-center justify-center gap-4 tracking-[0.2em] pl-8">
+                    입장하기 <i class="fas fa-arrow-right text-sm group-hover:translate-x-2 transition-transform text-magenta text-xl"></i>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- [Step 2] 메인 컨텐츠 영역 -->
-    <div id="main-content" class="hidden opacity-0 transition-opacity duration-1000">
-        <!-- 네비게이션 헤더 -->
-        <header class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-xl border-b border-white/5 h-16">
-            <div class="max-w-6xl mx-auto px-5 h-full flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="simply-logo-container" style="gap: 8px; width: auto;">
-                        <span class="font-black text-xl text-white tracking-tighter" style="font-weight: 600;">Simply</span>
-                        <span class="font-black text-xl text-magenta tracking-tighter" style="font-weight: 800;">U+</span>
-                    </div>
+    <!-- [고정] 2. 메인 컨텐츠 영역 -->
+    <div id="main-content" class="hidden opacity-0 transition-opacity duration-700 bg-white">
+        
+        <header class="fixed top-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-100 h-16 px-5 flex items-center justify-between z-[500]">
+            <div class="flex items-center gap-6 md:gap-10">
+                <!-- [🔥 Apply] 상단 헤더 원본 이미지 로고 -->
+                <div onclick="location.reload()" class="flex items-baseline cursor-pointer active:scale-95 transition-transform gap-1.5" style="width: auto;">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-6 md:h-7 object-contain" onerror="this.src='https://via.placeholder.com/150x50/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <span class="simply-direct text-sm font-bold">다이렉트</span>
                 </div>
-
-                <nav class="hidden md:flex gap-8 text-[12px] font-black uppercase tracking-wider text-slate-500">
-                    <a href="#devices" class="hover:text-white transition-colors">인기기기</a>
-                    <a href="#store-guide" class="hover:text-white transition-colors">매장안내</a>
-                    <a href="#consult" class="hover:text-white transition-colors">단독혜택</a>
+                <nav class="hidden md:flex gap-8 text-[11px] font-black uppercase tracking-widest text-slate-500">
+                    <button onclick="scrollToId('devices')" class="hover:text-magenta transition-colors">인기기기</button>
+                    <button onclick="scrollToId('store-guide')" class="hover:text-magenta transition-colors">매장안내</button>
+                    <button onclick="scrollToId('consult')" class="hover:text-magenta transition-colors">상담신청</button>
                 </nav>
-
-                <div class="flex items-center gap-2">
-                    <button onclick="document.getElementById('consult').scrollIntoView({behavior:'smooth'})" class="hidden sm:block text-[10px] font-black text-white magenta-gradient px-5 py-2 rounded-full shadow-lg uppercase">Get Offer</button>
-                    <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 flex items-center justify-center text-white text-2xl">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
             </div>
+            <button onclick="toggleMobileMenu()" class="p-2 text-slate-900 text-2xl"><i class="fas fa-bars"></i></button>
         </header>
 
-        <!-- 모바일 사이드 메뉴 -->
-        <div id="mobile-menu" class="fixed inset-0 z-[150] bg-black flex flex-col p-10 md:hidden text-center">
-            <div class="flex justify-between items-center mb-16 w-full">
-                <div class="simply-logo-container" style="justify-content: flex-start; width: auto;"><span class="simply-text-main text-2xl" style="font-weight: 600;">Simply</span><span class="simply-u-main text-2xl" style="font-weight: 800;">U+</span></div>
-                <button onclick="toggleMobileMenu()" class="text-white text-3xl"><i class="fas fa-times"></i></button>
+        <!-- 모바일 메뉴 -->
+        <div id="mobile-menu" class="fixed inset-0 bg-white flex flex-col p-10 hidden z-[600] text-left shadow-2xl">
+            <div class="flex justify-between items-center mb-16">
+                <!-- [🔥 Apply] 모바일 메뉴 원본 이미지 로고 -->
+                <div class="flex items-baseline justify-start gap-2">
+                    <img src="logo.jpg.jfif" alt="Simply. U+" class="h-8 object-contain" onerror="this.src='https://via.placeholder.com/180x60/ffffff/FF00A0?text=Simply.+U%2B'">
+                    <span class="simply-direct text-lg font-bold">다이렉트</span>
+                </div>
+                <button onclick="toggleMobileMenu()" class="text-slate-900 text-3xl"><i class="fas fa-times"></i></button>
             </div>
             <nav class="flex flex-col gap-10 text-3xl font-black italic tracking-tighter">
-                <a href="#devices" onclick="toggleMobileMenu()" class="text-white border-b border-white/10 pb-4">인기기기</a>
-                <a href="#store-guide" onclick="toggleMobileMenu()" class="text-white border-b border-white/10 pb-4">매장안내</a>
-                <a href="#consult" onclick="toggleMobileMenu()" class="text-white border-b border-white/10 pb-4">단독혜택</a>
+                <button onclick="scrollToId('devices'); toggleMobileMenu();" class="text-slate-800 border-b border-slate-100 pb-4 text-left">인기기기</button>
+                <button onclick="scrollToId('store-guide'); toggleMobileMenu();" class="text-slate-800 border-b border-slate-100 pb-4 text-left">매장안내</button>
+                <button onclick="scrollToId('consult'); toggleMobileMenu();" class="text-magenta border-b border-slate-100 pb-4 text-left">상담신청</button>
             </nav>
             <div class="mt-auto">
-                <a href="tel:01077119870" class="block w-full py-5 magenta-gradient text-white rounded-2xl text-center font-black text-xl">실장님 바로 연결</a>
+                <button onclick="openCallModal(); toggleMobileMenu();" class="w-full py-5 bg-slate-900 text-white rounded-2xl text-center font-black text-xl italic uppercase shadow-xl">전화 상담연결</button>
             </div>
         </div>
 
-        <!-- 슬라이더 섹션 -->
-        <section class="pt-16">
-            <div class="slider-container relative h-[500px] md:h-[650px] bg-black">
-                <div class="slider-wrapper h-full" id="slider">
-                    <div class="slide h-full flex items-center overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-10"></div>
-                        <img src="s26_banner.jpg.png" class="absolute inset-0 w-full h-full object-cover opacity-60 scale-105" onerror="this.src='https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=2000'">
-                        <div class="relative z-20 max-w-6xl mx-auto px-6 md:px-20 w-full">
-                            <span class="inline-block bg-magenta text-white px-3 py-1 text-[10px] font-black rounded-sm mb-4 tracking-widest uppercase">Galaxy S26 Launch</span>
-                            <h2 class="text-5xl md:text-8xl font-black mb-4 tracking-tighter leading-[0.8] text-white italic">Premium<span class="text-magenta">.</span><br>Galaxy S26</h2>
-                            <p class="text-lg md:text-2xl font-bold text-slate-400 mb-10 leading-tight">수도권 통합 센터 단독 공시지원금 상향 패키지<br>가장 심플하고 강력한 구매 조건을 확인하세요.</p>
-                            <button onclick="scrollToConsult('S26 Ultra 상담')" class="magenta-gradient text-white px-10 py-5 rounded-full font-black text-lg shadow-2xl hover:scale-105 transition-transform italic">Apply Benefits</button>
-                        </div>
+        <!-- [고정] 3. 무한 루프 배너 슬라이더 -->
+        <section class="relative h-[480px] md:h-[720px] mt-16 overflow-hidden bg-white" id="slider-root">
+            <div class="slider-wrapper accelerated" id="main-slider">
+                <div class="main-slide px-6 bg-teal-50" id="clone-last"></div> 
+                
+                <div class="main-slide px-6" id="slide-1">
+                    <div class="absolute inset-0 opacity-90 bg-fixed bg-center bg-cover pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=2000');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+                    <div class="relative z-20 max-w-6xl mx-auto w-full text-left">
+                        <span class="bg-magenta text-white px-3 py-1 text-[10px] font-black rounded-sm mb-6 uppercase tracking-widest inline-block animate-bounce">Trade-in Festival</span>
+                        <h2 class="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-[1.2] text-slate-900 italic uppercase">
+                            Galaxy S26<br><span class="text-magenta inline-block mt-2">50% 반값</span> 보상판매
+                        </h2>
+                        <p class="text-lg md:text-2xl font-bold text-slate-700 mb-10 leading-tight">단독 런칭 패키지<br>쓰던 폰 반납하고 최신형 S26을 반값에 기변하세요.</p>
+                        <button onclick="scrollToId('devices')" class="bg-slate-900 text-white px-10 py-5 rounded-full font-black text-lg shadow-xl italic hover:bg-magenta transition-colors uppercase tracking-tight">상담 신청하고 혜택받기</button>
                     </div>
                 </div>
+                
+                <div class="main-slide px-6 bg-slate-50" id="slide-2">
+                    <div class="absolute inset-0 opacity-30 bg-center bg-cover pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2000');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent z-10 pointer-events-none"></div>
+                    <div class="relative z-20 max-w-6xl mx-auto w-full text-left">
+                        <span class="bg-blue-600 text-white px-3 py-1 text-[10px] font-black rounded-sm mb-4 uppercase tracking-widest">Digital Direct</span>
+                        <h2 class="text-5xl md:text-8xl font-black mb-4 tracking-tighter leading-[1.1] text-slate-900 italic uppercase">IPTV +<br><span class="text-blue-600">INTERNET</span></h2>
+                        <p class="text-lg md:text-2xl font-bold text-slate-600 mb-8 leading-tight">현금 사은품 최대 47만원 지급 + @</p>
+                    </div>
+                </div>
+                <div class="main-slide px-6 bg-orange-50" id="slide-3">
+                    <div class="relative z-20 max-w-6xl mx-auto w-full text-left">
+                        <span class="bg-orange-500 text-white px-3 py-1 text-[10px] font-black rounded-sm mb-4 uppercase tracking-widest inline-block">Business Only</span>
+                        <h2 class="text-5xl md:text-8xl font-black mb-4 tracking-tighter leading-[1.1] text-slate-900 italic uppercase">Corporate<br><span class="text-orange-500">Partner</span></h2>
+                        <p class="text-lg md:text-2xl font-bold text-slate-600 mb-8 leading-tight">법인/사업자 전용 추가 대금 지원.</p>
+                    </div>
+                </div>
+                <div class="main-slide px-6 bg-slate-100" id="slide-4">
+                    <div class="relative z-20 max-w-6xl mx-auto w-full text-left">
+                        <span class="bg-slate-800 text-white px-3 py-1 text-[10px] font-black rounded-sm mb-4 uppercase tracking-widest inline-block">Apple Edition</span>
+                        <h2 class="text-5xl md:text-8xl font-black mb-4 tracking-tighter leading-[1.1] text-slate-900 italic uppercase">iPhone 16<br><span class="text-slate-500">Pro Edition</span></h2>
+                        <p class="text-lg md:text-2xl font-bold text-slate-500 mb-8 leading-tight">실장 단독 ixi-O 완전 지원 패키지.</p>
+                    </div>
+                </div>
+                <div class="main-slide px-6 bg-teal-50" id="slide-5">
+                    <div class="relative z-20 max-w-6xl mx-auto w-full text-left">
+                        <span class="bg-teal-600 text-white px-3 py-1 text-[10px] font-black rounded-sm mb-4 uppercase tracking-widest inline-block">Family Care</span>
+                        <h2 class="text-5xl md:text-8xl font-black mb-4 tracking-tighter leading-[1.1] text-slate-900 italic uppercase">Family<br><span class="text-teal-600">Bundle</span></h2>
+                        <p class="text-lg md:text-2xl font-bold text-slate-600 mb-8 leading-tight">가계 통신비 50% 절감 맞춤 컨설팅.</p>
+                    </div>
+                </div>
+                <div class="main-slide px-6" id="clone-first"></div>
+            </div>
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2" id="slider-dots"></div>
+        </section>
+
+        <!-- [고정] 4. 베스트셀러 (S26 울트라 1번 고정) -->
+        <section id="devices" class="py-24 px-4 md:px-5 bg-white text-center">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-10 tracking-tight leading-tight w-full">기기 추천 리스트</h2>
+                <div class="flex justify-center gap-6 mb-16 border-b border-slate-100 pb-2">
+                    <button class="tab-btn active" id="tab-all" onclick="filterDevices('all')">추천</button>
+                    <button class="tab-btn" id="tab-samsung" onclick="filterDevices('samsung')">삼성</button>
+                    <button class="tab-btn" id="tab-apple" onclick="filterDevices('apple')">Apple</button>
+                </div>
+                <div id="device-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 text-left"></div>
             </div>
         </section>
 
-        <!-- 단말기 리스트 -->
-        <section id="devices" class="py-24 px-4 max-w-6xl mx-auto text-center">
-            <h2 class="text-4xl md:text-6xl font-black mb-4 tracking-tighter text-white uppercase italic underline decoration-magenta decoration-8 underline-offset-8">Best Seller</h2>
-            <p class="text-slate-600 font-bold uppercase tracking-[0.4em] text-[10px] font-sans mb-16 italic">U+ iXi AI Recommendation</p>
-            <div id="device-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
-        </section>
-
-        <!-- 매장 네트워크 -->
-        <section id="store-guide" class="py-24 px-4 bg-[#050505] border-y border-white/5">
+        <!-- [고정] 5. 매장 네트워크 -->
+        <section id="store-guide" class="py-24 px-4 bg-slate-50 border-y border-slate-200 relative z-20 text-left">
             <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-white uppercase font-sans italic">Metropolitan <span class="text-blue-500">Network</span></h2>
-                    <p class="text-slate-700 font-bold uppercase tracking-widest text-[10px]">수도권 통합 센터 20개 거점 지점 정보</p>
-                </div>
-                <div id="store-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
-                    <div class="lg:col-span-1 bg-[#0a0a0a] rounded-[3rem] p-8 border border-white/5 flex flex-col h-[650px] shadow-2xl">
-                        <div class="relative mb-6">
-                            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-700"></i>
-                            <input type="text" id="store-search" onkeyup="filterStores()" placeholder="매장 또는 동네 이름 검색" class="w-full pl-12 pr-4 py-5 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-magenta text-white text-sm font-bold">
-                        </div>
-                        <div class="store-list overflow-y-auto flex-1 space-y-4 pr-2" id="store-list-container"></div>
+                <h2 class="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900 uppercase font-sans italic"> 거점 매장 <span class="text-blue-600">Network</span></h2>
+                <div id="store-grid-layout" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 bg-white rounded-[2.5rem] p-8 border border-slate-200 flex flex-col h-[550px] shadow-lg">
+                        <input type="text" id="store-search" onkeyup="filterStores()" placeholder="매장 이름 검색" class="w-full p-5 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-magenta text-slate-900 text-sm font-bold mb-6 placeholder-slate-400">
+                        <div id="store-list-container" class="flex-1 overflow-y-auto pr-2 space-y-4 no-scrollbar font-bold text-left"></div>
                     </div>
-                    <div class="lg:col-span-2 bg-[#0a0a0a] rounded-[3rem] p-10 border border-white/5 flex flex-col items-center justify-center text-center shadow-2xl">
-                        <div class="w-24 h-24 bg-white/5 rounded-[2.5rem] flex items-center justify-center shadow-2xl mb-6"><i class="fas fa-map-location-dot text-4xl text-blue-500"></i></div>
-                        <h3 class="text-3xl font-black mb-3 text-white tracking-tighter" id="selected-store-name">매장을 선택해 주세요</h3>
-                        <p class="text-slate-500 text-lg mb-10 max-w-sm font-medium" id="selected-store-addr">통합 센터 지점을 선택하시면 상세 정보를 확인하실 수 있습니다.</p>
-                        <div class="w-full bg-black border border-white/5 rounded-[2.5rem] aspect-video flex flex-col items-center justify-center relative overflow-hidden group">
-                            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10 group-hover:opacity-0 transition-opacity"></div>
-                            <i class="fas fa-route text-6xl text-slate-900"></i>
-                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 z-20 text-left bg-black/80 backdrop-blur-md p-5 rounded-2xl border border-white/10 hidden scale-95 animate-up"><p class="text-xs text-white font-black" id="map-box-addr"></p></div>
+                    <div class="lg:col-span-2 bg-white rounded-[2.5rem] p-10 border border-slate-200 flex flex-col items-center justify-center text-center shadow-lg">
+                        <h3 id="selected-store-name" class="text-3xl font-black mb-3 text-slate-900 tracking-tighter">매장을 선택해 주세요</h3>
+                        <div class="w-full bg-slate-100 border border-slate-200 rounded-[2rem] aspect-video flex flex-col items-center justify-center relative overflow-hidden group shadow-inner mt-4">
+                            <i class="fas fa-route text-6xl text-slate-300"></i>
+                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 text-left bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-slate-200 hidden animate-up shadow-md"><p id="map-box-addr" class="text-xs text-slate-900 font-black"></p></div>
                         </div>
                         <div class="flex gap-4 w-full mt-10">
-                            <button onclick="openExternalMap()" class="flex-1 py-5 bg-[#FAE100] text-black rounded-3xl font-black text-sm uppercase italic">Open Map</button>
-                            <button onclick="callSelectedStore()" class="flex-1 py-5 border border-white/10 text-white rounded-3xl font-black text-sm uppercase italic hover:bg-white/5">Call Center</button>
+                            <button onclick="window.open('https://map.kakao.com/')" class="flex-1 py-5 bg-[#FAE100] text-black rounded-3xl font-black uppercase text-sm shadow-md active:scale-95 transition-transform italic">지도로 보기</button>
+                            <button onclick="callCurrentStore()" class="flex-1 py-5 bg-slate-900 text-white rounded-3xl font-black text-sm uppercase italic hover:bg-magenta transition-colors active:scale-95">매장 전화</button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 상담 신청 양식 -->
-        <section id="consult" class="py-24 px-5 bg-black relative text-center border-t border-white/5">
-            <div class="max-w-4xl mx-auto text-center relative z-10">
-                <h2 class="text-4xl md:text-7xl font-black mb-6 tracking-tighter text-white uppercase font-sans italic">Simply<span class="text-magenta">.</span> 상담신청</h2>
-                <p class="text-slate-500 mb-12 font-medium text-lg italic tracking-tight font-sans italic font-sans">The most simple way to get premium benefits.</p>
-                <form onsubmit="handleFinalConsult(event)" class="max-w-md mx-auto space-y-4">
-                    <input type="text" id="c-name" required placeholder="고객님 성함" class="w-full bg-[#0a0a0a] border border-white/10 p-6 rounded-[1.8rem] outline-none focus:border-magenta text-white font-bold text-sm">
-                    <input type="tel" id="c-phone" required placeholder="연락처 010-0000-0000" class="w-full bg-[#0a0a0a] border border-white/10 p-6 rounded-[1.8rem] outline-none focus:border-magenta text-white font-bold text-sm">
-                    <select id="c-interest" class="w-full bg-[#0a0a0a] border border-white/10 p-6 rounded-[1.8rem] outline-none focus:border-magenta text-white font-bold text-sm appearance-none cursor-pointer">
-                        <option>갤럭시 S26 울트라 통합 혜택</option>
-                        <option>수도권 거주자 우대 추가 할인</option>
-                        <option>홈 네트워크 결합 최대 지원</option>
-                    </select>
-                    <button type="submit" class="w-full magenta-gradient text-white py-6 rounded-[2rem] font-black text-xl shadow-[0_20px_40px_rgba(255,0,160,0.3)] hover:brightness-110 active:scale-95 italic mt-6">Simply Apply</button>
-                </form>
-            </div>
+        <!-- [고정] 6. 상담 신청 -->
+        <section id="consult" class="py-24 px-5 bg-white text-center">
+            <h2 class="text-4xl md:text-7xl font-black mb-6 tracking-tighter text-slate-900 uppercase italic leading-none">Simply<span class="text-magenta">.</span> 상담신청</h2>
+            <form onsubmit="handleFinalConsult(event)" class="max-w-md mx-auto space-y-4 text-left mt-10">
+                <input type="text" id="c-name" required placeholder="성함" class="w-full bg-slate-50 border border-slate-200 p-6 rounded-[1.8rem] text-slate-900 font-bold text-sm outline-none focus:border-magenta placeholder-slate-400">
+                <input type="tel" id="c-phone" required placeholder="연락처" class="w-full bg-slate-50 border border-slate-200 p-6 rounded-[1.8rem] text-slate-900 font-bold text-sm outline-none focus:border-magenta placeholder-slate-400">
+                <button type="submit" class="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-black text-xl italic mt-6 shadow-xl uppercase tracking-widest hover:bg-magenta transition-colors">신청하기</button>
+            </form>
         </section>
 
-        <!-- 푸터 -->
-        <footer class="py-20 px-5 text-center bg-black border-t border-white/5 flex flex-col items-center">
-            <div class="simply-logo-container mb-6" style="width: auto;"><span class="simply-text-main text-2xl" style="font-weight: 600;">Simply</span><span class="simply-text-magenta text-2xl" style="font-weight: 800;">U+</span></div>
-            <p class="text-slate-800 text-[10px] font-bold uppercase tracking-[0.5em] mb-10 font-sans italic">Metropolitan Network HUB</p>
-            <p class="text-slate-600 text-sm leading-relaxed font-medium">안산 성포동 586 롯데마트 1층 (본사 직영 거점)<br><span class="text-slate-400 font-black">실장 임시환 | 010-7711-9870</span></p>
+        <!-- [고정] 7. 공식 푸터 -->
+        <footer class="bg-[#1a1a18] text-[#888] py-14 px-5 relative z-20 text-left border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-8 text-[12px] font-bold text-white/90">
+                    <button onclick="showMsgBox('서비스 준비 중입니다.')" class="hover:text-magenta transition-colors">이용약관</button><span class="text-white/10">|</span>
+                    <button onclick="showMsgBox('서비스 준비 중입니다.')" class="hover:text-magenta transition-colors">위치정보이용약관</button><span class="text-white/10">|</span>
+                    <button onclick="showMsgBox('서비스 준비 중입니다.')" class="text-magenta border-b border-magenta/30 pb-0.5">개인정보처리방침</button>
+                </div>
+                <div class="space-y-2 mb-10 text-[11px] font-medium leading-relaxed opacity-60">
+                    <p>(주)엘지유플러스 서울특별시 용산구 한강대로 32 대표이사 황현식 사업자등록번호 220-81-39938 <span onclick="showMsgBox('서비스 준비 중입니다.')" class="text-white/40 cursor-pointer underline ml-2 hover:text-white transition-colors">사업자정보확인 <i class="fas fa-chevron-right text-[8px]"></i></span></p>
+                    <p>고객센터 : 휴대폰 114(무료) 1544-0010(유료) <span class="mx-2 text-white/10">|</span> 인터넷/IPTV/전화 101(무료) 1644-7000(유료)</p>
+                </div>
+                <div class="flex justify-between items-center pt-8 border-t border-white/5 text-left">
+                    <!-- 하단 푸터는 까만 배경이므로, 기존의 하얀색 글씨+SVG 코드를 그대로 유지합니다 -->
+                    <div class="simply-logo-container text-sm" style="justify-content: flex-start; gap: 4px; opacity: 0.4;">
+                        <span class="simply-text-main text-white">Simply.</span>
+                        <svg class="simply-u-svg text-white" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 21 0 L 21 62 A 26 26 0 0 0 73 62 L 73 0" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="butt" />
+                            <path d="M 116 22 L 116 72 M 91 47 L 141 47" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="butt" />
+                        </svg>
+                        <span class="simply-direct text-white opacity-80" style="margin-left:4px;">다이렉트</span>
+                    </div>
+                    <p class="text-[10px] uppercase font-sans tracking-widest opacity-40 text-right">Copyright © LG Uplus Corp. All Rights Reserved.</p>
+                </div>
+            </div>
         </footer>
 
-        <!-- 플로팅 하단 연결 바 -->
-        <div class="fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-xl border-t border-white/5 p-4 flex gap-3 max-w-6xl mx-auto right-0 shadow-lg z-50">
-            <button onclick="window.location.href='https://pf.kakao.com/'" class="w-16 h-16 bg-[#FAE100] text-black rounded-2xl flex items-center justify-center shadow-lg active:scale-90 flex-shrink-0"><i class="fas fa-comment text-2xl"></i></button>
-            <a href="tel:01077119870" class="flex-1 magenta-gradient text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 text-xl shadow-xl active:scale-95 italic">Call Now</a>
+        <!-- 플로팅 하단 바 -->
+        <div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200 p-4 flex gap-3 max-w-6xl mx-auto right-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-[550]">
+            <button onclick="window.open('https://pf.kakao.com/')" class="w-14 h-14 md:w-16 md:h-16 bg-[#FAE100] text-black rounded-2xl flex items-center justify-center shadow-md active:scale-90 transition-transform text-2xl"><i class="fas fa-comment"></i></button>
+            <button onclick="openCallModal()" class="flex-1 bg-slate-900 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 text-lg shadow-lg active:scale-95 transition-transform italic uppercase tracking-tighter hover:bg-magenta">전화상담 바로연결</button>
         </div>
     </div>
 
-    <!-- 기기 상세 모달 -->
-    <div id="specModal" class="fixed inset-0 z-[100] modal-bg hidden items-center justify-center p-4" onclick="closeModal()">
-        <div class="bg-[#0a0a0a] w-full max-w-md rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/10 animate-in zoom-in duration-300" onclick="event.stopPropagation()">
-            <div class="h-64 bg-black flex items-center justify-center p-12 relative overflow-hidden text-left">
-                <button onclick="closeModal()" class="absolute top-6 right-6 w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-white transition-colors focus:outline-none"><i class="fas fa-times"></i></button>
-                <img id="modalImg" src="" alt="단말기" class="h-full object-contain relative z-10 drop-shadow-2xl">
+    <!-- [고정] 완벽 복구된 상세 모달 (동시 스크롤 및 24/36개월 요금 연동) -->
+    <div id="specModal" class="modal-overlay accelerated" onclick="closeModal()">
+        <div class="modal-content relative animate-up text-left flex flex-col w-full max-h-[90vh]" onclick="event.stopPropagation()">
+            
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-slate-800 z-[60] shadow-md active:scale-90 transition-transform">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <!-- 동시 스크롤 영역 -->
+            <div class="flex-1 overflow-y-auto no-scrollbar flex flex-col md:flex-row w-full bg-white">
+                
+                <div class="w-full md:w-1/2 bg-[#F8F9FA] flex-shrink-0 md:border-r border-slate-200 relative h-[350px] md:h-auto md:min-h-[500px] flex flex-col">
+                    <div id="modalParallaxBg" class="flex-1 w-full h-full bg-contain bg-no-repeat bg-center transition-opacity duration-300" style="background-color: transparent;"></div>
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20" id="modal-thumb-list"></div>
+                </div>
+                
+                <div class="w-full md:w-1/2 bg-white flex flex-col p-6 md:p-10 pb-8">
+                    <p class="text-magenta text-[10px] font-black mb-1 italic uppercase tracking-widest">Simply Premium Experience</p>
+                    <h3 id="modalTitle" class="text-2xl md:text-3xl font-black tracking-tighter mb-8 uppercase leading-none">MODEL NAME</h3>
+                    
+                    <div class="space-y-8 mb-8">
+                        <div>
+                            <label class="text-[11px] font-black mb-3 block uppercase text-slate-400">용량 선택</label>
+                            <div class="flex gap-2">
+                                <div id="cap-512" onclick="selectOption('cap', '512')" class="order-btn active flex-1 py-4 text-sm">기본 모델</div>
+                                <div id="cap-1tb" onclick="selectOption('cap', '1tb')" class="order-btn flex-1 py-4 text-sm">고용량 모델</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 할부 기간 선택 -->
+                        <div>
+                            <label class="text-[11px] font-black mb-3 block uppercase text-slate-400">할부 기간</label>
+                            <div class="flex gap-2">
+                                <div id="month-24" onclick="selectOption('month', '24')" class="order-btn active flex-1 py-4 text-[11px]">24개월</div>
+                                <div id="month-36" onclick="selectOption('month', '36')" class="order-btn flex-1 py-4 text-[11px]">36개월</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[11px] font-black mb-3 block uppercase text-slate-400">가입 유형</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div id="type-change" onclick="selectOption('type', 'change')" class="order-btn py-4 text-[11px]">기기변경</div>
+                                <div id="type-move" onclick="selectOption('type', 'move')" class="order-btn active py-4 text-[11px]">번호이동</div>
+                                <div id="type-new" onclick="selectOption('type', 'new')" class="order-btn py-4 text-[11px]">신규가입</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 요금 설계 계산기 -->
+                        <div class="bg-[#F8F9FA] rounded-3xl p-6 border border-slate-200 shadow-sm transition-all duration-300" id="price-calc-box">
+                            <div class="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+                                <span class="font-black text-sm uppercase text-slate-500 tracking-tighter">월 예상 납부금액</span>
+                                <span id="calc-total" class="text-2xl md:text-3xl font-black text-magenta tracking-tighter text-right transition-all">0원</span>
+                            </div>
+                            <div class="space-y-4 pt-2 text-[12px] font-bold text-slate-500">
+                                <div class="flex justify-between"><span id="calc-month-label">기기 할부금 (24개월)</span><span id="calc-device" class="text-slate-900 font-black text-right">0원</span></div>
+                                <div class="flex justify-between"><span>통신 요금 (선택약정 적용)</span><span class="text-slate-900 font-black text-right">48,500원</span></div>
+                                <div class="flex justify-between text-magenta italic"><span>실장 단독 추가 지원 (<span id="calc-type-label">번호이동</span>)</span><span id="calc-discount" class="font-black text-right transition-all">-0원</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="p-10 text-left">
-                <h3 id="modalTitle" class="text-3xl font-black mb-1 text-white tracking-tighter font-sans uppercase">MODEL NAME</h3>
-                <p class="text-magenta text-xs mb-10 font-black uppercase tracking-[0.4em] font-sans italic">Performance</p>
-                <div class="space-y-4 mb-12" id="specList"></div>
-                <button onclick="closeModal(); document.getElementById('consult').scrollIntoView({behavior:'smooth'})" class="w-full magenta-gradient text-white py-5 rounded-3xl font-black active:scale-95 shadow-2xl font-sans uppercase italic tracking-tighter">Get Benefit</button>
+
+            <!-- 하단 고정 예약 버튼 -->
+            <div class="w-full p-4 bg-white/95 backdrop-blur-md border-t border-slate-100 flex gap-3 z-50 flex-shrink-0 rounded-b-[2.5rem]">
+                <button onclick="openCallModal()" class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center active:scale-95 transition-transform flex-shrink-0"><i class="fas fa-phone-alt"></i></button>
+                <button onclick="submitOrder()" class="flex-1 bg-slate-900 text-white rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all uppercase italic tracking-tighter hover:bg-magenta">상담 예약하기</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 20개 매장 연결 팝업 -->
+    <div id="callModal" class="modal-overlay accelerated text-left" onclick="closeCallModal()">
+        <div class="modal-content-call animate-up text-left" onclick="event.stopPropagation()">
+            <div class="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+                <div><h3 class="font-black text-slate-900 text-lg">통합 거점 매장 연결</h3><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Call Center Selection</p></div>
+                <button onclick="closeCallModal()" class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm text-slate-400"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="call-list-container" class="flex-1 overflow-y-auto p-4 no-scrollbar space-y-2"></div>
+            <div class="p-4 bg-slate-50 text-center"><p class="text-[10px] text-slate-400 font-bold italic">선택하시면 바로 전화 연결됩니다.</p></div>
+        </div>
+    </div>
+
+    <!-- 공통 알림창 -->
+    <div id="msgBox" class="fixed inset-0 z-[1100] bg-slate-900/40 hidden items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white rounded-[2rem] p-8 w-full max-w-xs text-center shadow-2xl animate-up border border-slate-100">
+            <p id="msgTxt" class="text-slate-900 font-bold mb-6 leading-relaxed"></p>
+            <button onclick="closeMsgBox()" class="w-full py-4 bg-slate-900 text-white rounded-xl font-black uppercase text-sm shadow-lg hover:bg-magenta transition-colors">확인</button>
         </div>
     </div>
 
     <script>
-        const CONFIG = {
-            devices: [
-                { id: 's26u', name: '갤럭시 S26 Ultra', img: 'https://img.samsung.com/korea/galaxy-s24/p6_ultra/color/img_color_titanium_gray.png', price: '138,040', tag: 'Simply 인기', specs: { disp: '6.8" QHD+ LTPO', cpu: 'Snapdragon 8 Gen 4', mem: '12GB/512GB', bat: '5,000mAh' } },
-                { id: 'zfold6', name: '갤럭시 Z Fold6', img: 'https://img.samsung.com/korea/galaxy-z-fold6/color/img_color_silver_shadow.png', price: '162,100', tag: 'PREMIUM', specs: { disp: '7.6" Main QXGA+', cpu: 'Snapdragon 8 Gen 3', mem: '12GB/512GB', bat: '4,400mAh' } },
-                { id: 'zflip6', name: '갤럭시 Z Flip6', img: 'https://img.samsung.com/korea/galaxy-z-flip6/color/img_color_blue.png', price: '98,400', tag: 'Simply HOT', specs: { disp: '6.7" Flex Display', cpu: 'Snapdragon 8 Gen 3', mem: '12GB/256GB', bat: '4,000mAh' } },
-                { id: 'ip16pro', name: 'iPhone 16 Pro', img: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-6-3inch-desert-titanium?wid=5120&hei=2880&fmt=p-jpg&qlt=80', price: '118,200', tag: 'APPLE', specs: { disp: '6.3" ProMotion', cpu: 'A18 Pro Chip', mem: '8GB/256GB', bat: 'Up to 27h' } },
-                { id: 's26p', name: '갤럭시 S26+', img: 'https://img.samsung.com/korea/galaxy-s24/p6_plus/color/img_color_marble_gray.png', price: '122,750', specs: { disp: '6.7" QHD+ AMOLED', cpu: 'Snapdragon 8 Gen 4', mem: '12GB/512GB', bat: '4,900mAh' } },
-                { id: 's26', name: '갤럭시 S26', img: 'https://img.samsung.com/korea/galaxy-s24/p6_standard/color/img_color_marble_gray.png', price: '113,980', specs: { disp: '6.2" AMOLED 2X', cpu: 'Snapdragon 8 Gen 4', mem: '8GB/256GB', bat: '4,000mAh' } },
-                { id: 'ip17e', name: 'iPhone 17e', img: 'https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-finish-select-202409-6-1inch-pink?wid=5120&hei=2880&fmt=p-jpg&qlt=80', price: '86,670', tag: 'NEW', specs: { disp: '6.1" Retina XDR', cpu: 'A19 Bionic', mem: '8GB/256GB', bat: 'Fast Charge' } },
-                { id: 'a15', name: '갤럭시 A15', img: 'https://img.samsung.com/korea/galaxy-a15/color/img_color_blue_black.png', price: '32,150', tag: '가성비', specs: { disp: '6.5" Super AMOLED', cpu: 'Octa-Core', mem: '4GB/128GB', bat: '5,000mAh' } }
-            ],
-            stores: [
-                { name: "상록롯데마트점 (통합 거점)", dist: "상록구", addr: "성포동 586 롯데마트 1층", tel: "010-7711-9870" },
-                { name: "수도권 광역 상담센터", dist: "단원구", addr: "단원구 중앙대로 907", tel: "080-019-1100" },
-                { name: "상록수역 광역 거점", dist: "상록구", addr: "상록구 본오동 877-1", tel: "031-417-0000" },
-                { name: "안산 중앙 통합역점", dist: "단원구", addr: "단원구 고잔동 541", tel: "031-482-0000" },
-                { name: "고잔신도시 프리미엄", dist: "단원구", addr: "단원구 고잔동 771", tel: "031-411-0000" },
-                { name: "선부 다이아몬드 통합", dist: "단원구", addr: "단원구 선부동 1076", tel: "031-485-0000" },
-                { name: "본오동 통합 센터", dist: "상록구", addr: "상록구 본오동 801", tel: "031-407-0000" },
-                { name: "와동 사거리 거점", dist: "단원구", addr: "단원구 와동 762", tel: "031-484-0000" },
-                { name: "성포동 통합 센터", dist: "상록구", addr: "상록구 성포동 592", tel: "031-402-0000" },
-                { name: "월피동 통합 거점", dist: "상록구", addr: "상록구 월피동 445", tel: "031-413-0000" },
-                { name: "한대앞역 통합 센터", dist: "상록구", addr: "상록구 이동 715", tel: "031-415-0000" },
-                { name: "원곡 라성 통합", dist: "단원구", addr: "단원구 원곡동 846", tel: "031-491-0000" },
-                { name: "초지 통합 상담센터", dist: "단원구", addr: "단원구 초지동 603", tel: "031-403-0000" },
-                { name: "신길 통합 거점", dist: "단원구", addr: "단원구 신길동 1601", tel: "031-495-0000" },
-                { name: "NC백화점 통합 상담", dist: "단원구", addr: "단원구 고잔동 726", tel: "031-410-0000" },
-                { name: "일동 우체국 거점", dist: "상록구", addr: "상록구 일동 583", tel: "031-419-0000" },
-                { name: "사동 감골 통합", dist: "상록구", addr: "상록구 사동 1421", tel: "031-418-0000" },
-                { name: "그랑시티 통합 센터", dist: "상록구", addr: "상록구 사동 1639", tel: "031-406-0000" },
-                { name: "원시역 기업 전문", dist: "단원구", addr: "단원구 원시동 726", tel: "031-493-0000" },
-                { name: "안산 법원 통합", dist: "단원구", addr: "단원구 고잔동 708", tel: "031-414-0000" }
-            ]
-        };
+        const storeData = [
+            { name: "상록롯데마트점 (본부)", dist: "상록구", tel: "010-7711-9870", addr: "성포동 586 롯데마트 1층" },
+            { name: "안산 중앙 통합역점", dist: "단원구", tel: "031-482-0000", addr: "단원구 고잔동 541" },
+            { name: "상록수역 광역거점", dist: "상록구", tel: "031-417-0000", addr: "상록구 본오동 877-1" },
+            { name: "고잔신도시 프리미엄", dist: "단원구", tel: "031-411-0000", addr: "단원구 고잔동 771" },
+            { name: "시흥 배곧 다이렉트", dist: "시흥시", tel: "031-498-0000", addr: "배곧동 192" },
+            { name: "부천 상동 통합점", dist: "부천시", tel: "032-322-0000", addr: "상동 541-1" },
+            { name: "부천 중동 거점센터", dist: "부천시", tel: "032-665-0000", addr: "중동 1141" },
+            { name: "수원 영통 프리미엄", dist: "수원시", tel: "031-205-0000", addr: "영통동 998-1" },
+            { name: "수원 인계 거점점", dist: "수원시", tel: "031-233-0000", addr: "인계동 1113" },
+            { name: "안양 범계 프리미엄", dist: "안양시", tel: "031-381-0000", addr: "동안구 호계동 1045" },
+            { name: "광명 소하 거점점", dist: "광명시", tel: "02-899-0000", addr: "소하동 1343" },
+            { name: "성남 판교 다이렉트", dist: "성남시", tel: "031-707-0000", addr: "삼평동 670" },
+            { name: "화성 새솔 통합점", dist: "화성시", tel: "031-355-0000", addr: "수노을중앙로 142" },
+            { name: "인천 송도 테크노점", dist: "인천시", tel: "032-811-0000", addr: "송도동 172-1" },
+            { name: "인천 논현 역전점", dist: "인천시", tel: "032-424-0000", addr: "논현동 632" },
+            { name: "군포 산본 역전점", dist: "군포시", tel: "031-395-0000", addr: "산본동 1142" },
+            { name: "의왕 내손 통합센터", dist: "의왕시", tel: "031-422-0000", addr: "내손동 753" },
+            { name: "용인 기흥 통합센터", dist: "용인시", tel: "031-282-0000", addr: "구갈동 354" },
+            { name: "용인 수지 역전점", dist: "용인시", tel: "031-262-0000", addr: "풍덕천동 712" },
+            { name: "과천 다이렉트점", dist: "과천시", tel: "02-502-0000", addr: "별양동 1-15" }
+        ];
 
-        let currentSlide = 0;
-        let selectedStore = CONFIG.stores[0];
+        const deviceData = [
+            { id: 1, brand: 'samsung', name: 'Galaxy S26 Ultra', sub: 'AI 모바일의 혁명적 진화', image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80', badge: '추천', basePrice: 145000, deviceMonthly: 68000, discount: 25000 },
+            { id: 2, brand: 'apple', name: 'iPhone 17 Pro', sub: '프로 성능의 절정에 서다', image: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=600&q=80', badge: '최신', basePrice: 155000, deviceMonthly: 78000, discount: 20000 },
+            { id: 3, brand: 'apple', name: 'iPhone 17 Pro Max', sub: '차세대 퍼포먼스의 끝', image: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=600&q=80', badge: '최신', basePrice: 175000, deviceMonthly: 88000, discount: 20000 },
+            { id: 4, brand: 'samsung', name: 'Galaxy Z Fold 6', sub: '대화면의 압도적 몰입', image: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?auto=format&fit=crop&w=600&q=80', badge: 'BEST', basePrice: 185000, deviceMonthly: 98000, discount: 35000 },
+            { id: 5, brand: 'samsung', name: 'Galaxy Z Flip 6', sub: '트렌디한 포켓 모바일', image: 'https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=600&q=80', badge: 'HOT', basePrice: 115000, deviceMonthly: 58000, discount: 15000 },
+            { id: 6, brand: 'apple', name: 'iPhone Air', sub: '역대 가장 얇은 iPhone', image: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&w=600&q=80', badge: 'NEW', basePrice: 125000, deviceMonthly: 65000, discount: 18000 }
+        ];
 
-        function init() { renderDevices(); renderStores(); }
-        function nextStep() { document.getElementById('check-step-1').classList.add('hidden'); document.getElementById('check-step-2').classList.remove('hidden'); }
+        let realSlideCount = 5, currentSlide = 1, isTransitioning = false, sliderTimer;
+        let startX = 0, endX = 0, threshold = 50, selectedStore = storeData[0], currentDevice = null;
+        let isDragging = false;
+
         function enterSite() {
-            const g = document.getElementById('gateway'); const m = document.getElementById('main-content');
-            g.classList.add('opacity-0');
-            setTimeout(() => { g.classList.add('hidden'); m.classList.remove('hidden'); setTimeout(() => m.classList.add('opacity-100'), 50); init(); }, 700);
+            const gw = document.getElementById('gateway');
+            gw.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            gw.classList.add('opacity-0', 'scale-110');
+            setTimeout(() => {
+                gw.style.display = 'none';
+                const mc = document.getElementById('main-content');
+                mc.classList.remove('hidden');
+                requestAnimationFrame(() => { mc.classList.add('opacity-100'); init(); });
+            }, 500);
         }
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-        function scrollToConsult(interest) { document.getElementById('consult').scrollIntoView({behavior:'smooth'}); document.getElementById('c-interest').value = interest; }
 
-        function renderDevices() {
-            const grid = document.getElementById('device-grid'); grid.innerHTML = '';
-            CONFIG.devices.forEach(d => {
-                const c = document.createElement('div'); c.className = "uplus-card p-10 relative cursor-pointer group text-left";
-                c.onclick = () => openModal(d);
-                c.innerHTML = `${d.tag ? `<span class="absolute top-8 left-8 bg-black text-white text-[9px] font-black px-3 py-1 rounded-full uppercase z-10 font-sans tracking-widest">${d.tag}</span>` : ''}<div class="py-10 flex justify-center h-48 items-center group-hover:scale-105 transition-all duration-500"><img src="${d.img}" class="h-44 object-contain"></div><h4 class="font-black text-slate-900 text-lg mb-6 tracking-tighter uppercase font-sans">${d.name}</h4><div class="bg-slate-50 p-5 rounded-[1.5rem] mb-6 border border-slate-100"><p class="text-[9px] text-blue-500 font-black mb-1 italic uppercase tracking-widest">Simply Recommendation</p><p class="font-black text-xl text-slate-900 leading-none font-sans">월 <span class="text-magenta font-black font-sans tracking-tighter">${d.price}원~</span></p></div><button class="w-full py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black group-hover:bg-magenta transition-all uppercase font-sans italic tracking-widest">View Details</button>`;
-                grid.appendChild(c);
+        function init() {
+            const slider = document.getElementById('main-slider');
+            const slides = Array.from(slider.querySelectorAll('.main-slide:not([id^="clone"])'));
+            document.getElementById('clone-first').innerHTML = slides[0].innerHTML;
+            document.getElementById('clone-first').className = slides[0].className;
+            document.getElementById('clone-last').innerHTML = slides[slides.length-1].innerHTML;
+            document.getElementById('clone-last').className = slides[slides.length-1].className;
+
+            renderDevices('all');
+            renderStoresList();
+            initSlider();
+            setupSwipe();
+            selectStore(storeData[0].name);
+        }
+
+        function moveSlider(index, animate = true) {
+            const slider = document.getElementById('main-slider');
+            slider.style.transition = animate ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+            slider.style.transform = `translate3d(-${index * 14.285}%, 0, 0)`;
+            currentSlide = index;
+            updateDots();
+        }
+
+        document.getElementById('main-slider').addEventListener('transitionend', () => {
+            isTransitioning = false;
+            if (currentSlide === 0) moveSlider(realSlideCount, false);
+            else if (currentSlide === realSlideCount + 1) moveSlider(1, false);
+        });
+
+        function nextSlide() { if (!isTransitioning) { isTransitioning = true; moveSlider(currentSlide + 1); } }
+        function prevSlide() { if (!isTransitioning) { isTransitioning = true; moveSlider(currentSlide - 1); } }
+
+        function initSlider() {
+            const dotsCont = document.getElementById('slider-dots');
+            dotsCont.innerHTML = [0,1,2,3,4].map(i => `<div id="dot-${i}" onclick="if(!isTransitioning){moveSlider(${i+1}); resetTimer();}" class="w-2 h-2 rounded-full bg-slate-200 cursor-pointer transition-all"></div>`).join('');
+            updateDots();
+            startTimer();
+        }
+
+        function startTimer() { sliderTimer = setInterval(nextSlide, 3000); }
+        function resetTimer() { clearInterval(sliderTimer); startTimer(); }
+
+        function setupSwipe() {
+            const root = document.getElementById('slider-root');
+            
+            // Mobile Touch
+            root.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
+            root.addEventListener('touchend', e => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            }, {passive: true});
+
+            // PC Mouse Drag
+            root.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
+            root.addEventListener('mouseleave', () => { isDragging = false; });
+            root.addEventListener('mouseup', e => {
+                if(!isDragging) return;
+                isDragging = false;
+                endX = e.clientX;
+                handleSwipe();
             });
         }
-        function openModal(d) {
-            document.getElementById('modalImg').src = d.img;
-            document.getElementById('modalTitle').innerText = d.name.toUpperCase();
-            document.getElementById('specList').innerHTML = `<div class="flex justify-between border-b border-white/5 pb-3 text-xs font-bold font-sans tracking-widest"><span class="text-slate-600 uppercase">Display</span><span class="text-slate-200">${d.specs.disp}</span></div><div class="flex justify-between border-b border-white/5 pb-3 text-xs font-bold font-sans tracking-widest"><span class="text-slate-600 uppercase">Processor</span><span class="text-slate-200">${d.specs.cpu}</span></div><div class="flex justify-between border-b border-white/5 pb-3 text-xs font-bold font-sans tracking-widest"><span class="text-slate-600 uppercase">Memory</span><span class="text-magenta">${d.specs.mem}</span></div><div class="flex justify-between border-b border-white/5 pb-3 text-xs font-bold font-sans tracking-widest"><span class="text-slate-600 uppercase">Battery</span><span class="text-slate-200">${d.specs.bat}</span></div>`;
-            document.getElementById('specModal').classList.remove('hidden'); document.getElementById('specModal').classList.add('flex'); document.body.style.overflow = 'hidden';
-        }
-        function closeModal() { document.getElementById('specModal').classList.add('hidden'); document.getElementById('specModal').classList.remove('flex'); document.body.style.overflow = 'auto'; }
 
-        function renderStores(filter = '전체', search = '') {
-            const list = document.getElementById('store-list-container'); list.innerHTML = '';
-            CONFIG.stores.filter(i => (filter === '전체' || i.dist === filter) && i.name.includes(search)).forEach(item => {
-                const d = document.createElement('div'); const isSel = selectedStore.name === item.name;
-                d.className = `p-6 rounded-[2rem] border ${isSel ? 'border-magenta bg-white/5 shadow-lg shadow-pink-900/10' : 'border-white/5 bg-white/5'} cursor-pointer hover:border-blue-500 transition-all`;
-                d.onclick = () => selectStore(item);
-                d.innerHTML = `<span class="text-[9px] font-black uppercase ${isSel ? 'text-magenta' : 'text-slate-800'} font-sans tracking-widest">${item.dist}</span><p class="text-white font-black text-sm mt-1">${item.name}</p><p class="text-[11px] text-slate-700 mt-1 leading-tight">${item.addr}</p>`;
-                list.appendChild(d);
-            });
+        function handleSwipe() {
+            if (startX - endX > threshold) nextSlide();
+            else if (endX - startX > threshold) prevSlide();
+            resetTimer();
         }
-        function selectStore(s) { selectedStore = s; document.getElementById('selected-store-name').innerText = s.name; document.getElementById('selected-store-addr').innerText = s.addr; document.getElementById('map-box-addr').innerText = s.addr; document.getElementById('store-addr-tag').classList.remove('hidden'); renderStores(); }
-        function filterStores() { renderStores('전체', document.getElementById('store-search').value); }
-        function openExternalMap() { window.open(`https://map.kakao.com/link/search/${selectedStore.name}`); }
-        function callSelectedStore() { window.location.href = `tel:${selectedStore.tel}`; }
-        function handleFinalConsult(e) { e.preventDefault(); alert('신청 완료! 10분 내로 연락드리겠습니다.'); location.reload(); }
+
+        function updateDots() {
+            let activeDotIndex = currentSlide - 1;
+            if (currentSlide === 0) activeDotIndex = realSlideCount - 1;
+            if (currentSlide === realSlideCount + 1) activeDotIndex = 0;
+            for(let i=0; i<realSlideCount; i++) {
+                const d = document.getElementById(`dot-${i}`);
+                if(d) d.className = `w-2 h-2 rounded-full bg-slate-200 cursor-pointer transition-all ${i===activeDotIndex?'bg-slate-900 w-8':''}`;
+            }
+        }
+
+        function renderDevices(filter) {
+            const grid = document.getElementById('device-grid');
+            const filtered = filter === 'all' ? deviceData : deviceData.filter(d => d.brand === filter);
+            grid.innerHTML = filtered.map(d => `
+                <div class="uplus-official-card cursor-pointer text-left" onclick="openSpecModal(${d.id})">
+                    <span class="badge-new">${d.badge}</span>
+                    <div class="w-full aspect-[4/5] flex items-center justify-center mb-6 overflow-hidden rounded-xl bg-slate-50 text-center">
+                        <img src="${d.image}" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <h4 class="font-bold text-slate-900 text-lg md:text-xl mb-1 truncate">${d.name}</h4>
+                    <p class="text-slate-500 text-[10px] mb-6 truncate">${d.sub}</p>
+                    <div class="mt-auto border-t border-slate-50 pt-4 text-left">
+                        <p class="text-magenta text-[9px] font-black mb-2 uppercase">Purchase Tip</p>
+                        <ul class="text-[10px] text-slate-500 font-bold space-y-1.5">
+                            <li class="flex items-start gap-1.5"><div class="w-1 h-1 bg-magenta rounded-full mt-1 flex-shrink-0"></div> ixi-O 완전 지원</li>
+                            <li class="flex items-start gap-1.5"><div class="w-1 h-1 bg-magenta rounded-full mt-1 flex-shrink-0"></div> Npay 12만 증정</li>
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterDevices(brand) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const target = document.getElementById(`tab-${brand}`);
+            if(target) target.classList.add('active');
+            renderDevices(brand);
+        }
+
+        function renderStoresList() {
+            const list = document.getElementById('store-list-container');
+            const search = document.getElementById('store-search').value.toLowerCase();
+            const filtered = storeData.filter(s => s.name.toLowerCase().includes(search) || s.dist.toLowerCase().includes(search));
+            list.innerHTML = filtered.map(s => `
+                <div class="p-4 rounded-xl border border-slate-100 bg-slate-50 text-left cursor-pointer transition-all hover:border-magenta ${selectedStore && selectedStore.name === s.name ? 'border-magenta bg-magenta/5' : ''}" onclick="selectStore('${s.name}')">
+                    <p class="text-[9px] font-black text-magenta uppercase">${s.dist}</p>
+                    <p class="font-bold text-slate-900 text-sm mt-0.5">${s.name}</p>
+                    <p class="text-[10px] text-slate-400 mt-1">${s.addr}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectStore(name) {
+            selectedStore = storeData.find(s => s.name === name) || storeData[0];
+            document.getElementById('selected-store-name').innerText = selectedStore.name;
+            document.getElementById('map-box-addr').innerText = selectedStore.addr;
+            document.getElementById('store-addr-tag').classList.remove('hidden');
+            renderStoresList();
+        }
+
+        function filterStores() { renderStoresList(); }
+
+        function openCallModal() {
+            const container = document.getElementById('call-list-container');
+            container.innerHTML = storeData.map(s => `
+                <div onclick="window.location.href='tel:${s.tel}'" class="p-5 bg-white border border-slate-100 rounded-2xl flex justify-between items-center cursor-pointer active:bg-slate-50 shadow-sm text-left">
+                    <div><p class="text-[9px] font-black text-magenta">${s.dist}</p><p class="font-bold text-slate-800 text-base mt-0.5">${s.name}</p></div>
+                    <div class="w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white flex-shrink-0"><i class="fas fa-phone-alt text-sm"></i></div>
+                </div>
+            `).join('');
+            document.getElementById('callModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openSpecModal(id) {
+            currentDevice = deviceData.find(device => device.id === id);
+            if(!currentDevice) return;
+            
+            const mBg = document.getElementById('modalParallaxBg'); 
+            mBg.style.backgroundImage = `url('${currentDevice.image}')`; 
+            document.getElementById('modalTitle').innerText = currentDevice.name.toUpperCase();
+            
+            const tList = document.getElementById('modal-thumb-list'); 
+            tList.innerHTML = [currentDevice.image, currentDevice.image, currentDevice.image].map((url, idx) => `
+                <div class="thumb-item flex items-center justify-center bg-white ${idx===0?'active':''}" onclick="changeModalImg('${url}', this)">
+                    <img src="${url}" class="w-full h-full object-contain">
+                </div>
+            `).join('');
+            
+            selectOption('cap', '512'); 
+            selectOption('month', '24');
+            selectOption('type', 'move');
+            
+            document.getElementById('specModal').style.display = 'flex'; 
+            document.body.style.overflow = 'hidden';
+        }
+
+        function changeModalImg(url, el) {
+            const mBg = document.getElementById('modalParallaxBg');
+            mBg.style.opacity = '0';
+            setTimeout(() => { mBg.style.backgroundImage = `url('${url}')`; mBg.style.opacity = '1'; }, 200);
+            document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function selectOption(g, v) {
+            let btns = [];
+            if (g === 'cap') btns = ['512', '1tb'];
+            else if (g === 'type') btns = ['change', 'move', 'new'];
+            else if (g === 'month') btns = ['24', '36'];
+
+            btns.forEach(b => {
+                const el = document.getElementById(`${g}-${b}`);
+                if(el) el.classList.remove('active');
+            });
+            const target = document.getElementById(`${g}-${v}`);
+            if(target) target.classList.add('active');
+            
+            updatePrice();
+        }
+
+        function updatePrice() {
+            if(!currentDevice) return;
+            
+            const is1TB = document.getElementById('cap-1tb')?.classList.contains('active');
+            const is36Month = document.getElementById('month-36')?.classList.contains('active');
+            const isChange = document.getElementById('type-change')?.classList.contains('active');
+            const isMove = document.getElementById('type-move')?.classList.contains('active');
+            const isNew = document.getElementById('type-new')?.classList.contains('active');
+
+            let planPrice = 48500; 
+            
+            let baseDeviceVal24 = currentDevice.deviceMonthly + (is1TB ? 12000 : 0);
+            let totalDevicePrice = baseDeviceVal24 * 24; 
+            
+            let months = is36Month ? 36 : 24;
+            let deviceVal = Math.round(totalDevicePrice / months);
+            
+            let discountVal = currentDevice.discount; 
+            let typeLabel = "기기변경";
+
+            if (isMove) { discountVal += 15000; typeLabel = "번호이동"; } 
+            else if (isNew) { discountVal += 5000; typeLabel = "신규가입"; } 
+            else if (isChange) { discountVal += 0; typeLabel = "기기변경"; }
+
+            const calcBox = document.getElementById('price-calc-box');
+            if(calcBox) {
+                calcBox.style.opacity = '0.4';
+                setTimeout(() => { calcBox.style.opacity = '1'; }, 200);
+            }
+
+            document.getElementById('calc-month-label').innerText = `기기 할부금 (${months}개월)`;
+            document.getElementById('calc-device').innerText = deviceVal.toLocaleString() + "원";
+            document.getElementById('calc-discount').innerText = "-" + discountVal.toLocaleString() + "원";
+            document.getElementById('calc-total').innerText = (deviceVal + planPrice - discountVal).toLocaleString() + "원";
+            
+            const typeLabelEl = document.getElementById('calc-type-label');
+            if(typeLabelEl) typeLabelEl.innerText = typeLabel;
+        }
+
+        function closeCallModal() { document.getElementById('callModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function closeModal() { document.getElementById('specModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function scrollToId(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        function handleFinalConsult(e) { e.preventDefault(); showMsgBox('상담 신청이 완료되었습니다! 실장님이 곧 연락드리겠습니다.'); }
+        function callCurrentStore() { window.location.href = `tel:${selectedStore.tel}`; }
+        function showMsgBox(t) { document.getElementById('msgTxt').innerText = t; document.getElementById('msgBox').style.display = 'flex'; }
+        function closeMsgBox() { document.getElementById('msgBox').style.display = 'none'; }
+        function submitOrder() { closeModal(); showMsgBox('상담 예약이 접수되었습니다! 담당 실장님이 배정 중입니다.'); }
     </script>
 </body>
 </html>

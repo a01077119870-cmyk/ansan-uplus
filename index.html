@@ -460,6 +460,35 @@
     </div>
 
     <script>
+        // [🔥 Apply] 모바일 기기 하드웨어 뒤로가기 버튼 연동 (History API)
+        window.addEventListener('popstate', function() {
+            // 뒤로가기가 눌렸을 때 열려있는 모든 모달과 메뉴를 강제로 닫음
+            document.getElementById('specModal').style.display = 'none';
+            document.getElementById('callModal').style.display = 'none';
+            document.getElementById('msgBox').style.display = 'none';
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // 창이 열릴 때 가상의 히스토리를 쌓는 함수
+        function pushModalState() { 
+            history.pushState({ modalOpen: true }, null, location.href); 
+        }
+
+        // 창이 닫힐 때 히스토리를 빼거나 화면을 정리하는 함수
+        function popModalState() { 
+            if (history.state && history.state.modalOpen) { 
+                history.back(); // 시스템 뒤로가기를 호출하여 자연스럽게 닫힘
+            } else {
+                // 비정상적인 상태일 경우 수동으로 모든 창 숨김 처리
+                document.getElementById('specModal').style.display = 'none';
+                document.getElementById('callModal').style.display = 'none';
+                document.getElementById('msgBox').style.display = 'none';
+                document.getElementById('mobile-menu').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
         const storeData = [
             { name: "엠씨 본점 사무실", dist: "안산 단원", tel: "031-401-9018", addr: "안산시 단원구 고잔로 108, 대동조이월드 12층" },
             { name: "광림프라자점", dist: "군포 산본", tel: "031-393-9019", addr: "군포시 산본로 323번길 16-15, 광림빌딩 1층" },
@@ -663,6 +692,7 @@
         }
 
         function openCallModal() {
+            pushModalState(); // 히스토리 스택 추가
             const container = document.getElementById('call-list-container');
             container.innerHTML = storeData.map(s => `
                 <div onclick="window.location.href='tel:${s.tel}'" class="p-5 bg-white border border-slate-100 rounded-2xl flex justify-between items-center cursor-pointer active:bg-slate-50 shadow-sm text-left">
@@ -675,11 +705,26 @@
         }
 
         function openSpecModal(id) {
+            pushModalState(); // 히스토리 스택 추가
             currentDevice = deviceData.find(device => device.id === id);
+            if(!currentDevice) return;
+            
+            const mBg = document.getElementById('modalParallaxBg'); 
+            mBg.style.backgroundImage = `url('${currentDevice.image}')`; 
+            document.getElementById('modalTitle').innerText = currentDevice.name; // 공식몰처럼 대문자 변환 제거
+            
+            const tList = document.getElementById('modal-thumb-list'); 
+            tList.innerHTML = [currentDevice.image, currentDevice.image, currentDevice.image].map((url, idx) => `
+                <div class="w-12 h-12 bg-white rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${idx===0 ? 'border-magenta scale-110' : 'border-transparent'}" onclick="changeModalImg('${url}', this)">
+                    <img src="${url}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+            
+            selectOption('cap', '512'); 
             selectOption('month', '24'); 
             selectOption('type', 'move');
             
-            // [🔥 Apply] 상세 배너 처리 및 스크롤 초기화
+            // 상세 배너 처리 및 스크롤 초기화
             const detailBannerArea = document.getElementById('detailBannerArea');
             const detailBannerImg = document.getElementById('detailBannerImg');
             const modalScrollArea = document.getElementById('modalScrollArea');
@@ -803,15 +848,35 @@
             document.getElementById('calc-total').innerText = finalTotal.toLocaleString();
         }
 
-        function closeCallModal() { document.getElementById('callModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function closeModal() { document.getElementById('specModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function closeCallModal() { popModalState(); }
+        function closeModal() { popModalState(); }
+        function toggleMobileMenu() { 
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                pushModalState();
+                menu.classList.remove('hidden');
+            } else {
+                popModalState();
+            }
+        }
         function scrollToId(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
-        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
         function handleFinalConsult(e) { e.preventDefault(); showMsgBox('상담 신청이 완료되었습니다! 실장님이 곧 연락드리겠습니다.'); }
         function callCurrentStore() { window.location.href = `tel:${selectedStore.tel}`; }
-        function showMsgBox(t) { document.getElementById('msgTxt').innerText = t; document.getElementById('msgBox').style.display = 'flex'; }
-        function closeMsgBox() { document.getElementById('msgBox').style.display = 'none'; }
-        function submitOrder() { closeModal(); showMsgBox('상담 예약이 접수되었습니다! 담당 실장님이 배정 중입니다.'); }
+        
+        function showMsgBox(t) { 
+            document.getElementById('msgTxt').innerText = t; 
+            pushModalState(); // 히스토리 스택 추가
+            document.getElementById('msgBox').style.display = 'flex'; 
+        }
+        function closeMsgBox() { popModalState(); }
+        
+        function submitOrder() { 
+            popModalState(); // 상세 모달 먼저 닫기 (뒤로가기 처리 포함)
+            // 비동기 지연 후 완료 메시지 창 띄우기 (충돌 방지)
+            setTimeout(() => {
+                showMsgBox('상담 예약이 접수되었습니다! 담당 실장님이 배정 중입니다.');
+            }, 150);
+        }
     </script>
 </body>
 </html>

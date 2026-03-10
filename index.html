@@ -82,8 +82,8 @@
 
     <!-- [고정] 1. 게이트웨이 -->
     <div id="gateway" class="fixed inset-0 z-[700] flex flex-col items-center justify-center p-6 transition-all duration-700 bg-white overflow-hidden text-center">
-        <!-- [🔥 Fix] 동영상 투명도를 100%로 올려서 가장 선명하게 -->
-        <video autoplay loop muted playsinline webkit-playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-100 bg-slate-100 accelerated">
+        <!-- [🔥 Fix] 모바일에서는 영상이 잘리지 않게(object-contain), PC에서는 꽉 차게(md:object-cover) 자동 반응형 적용 -->
+        <video autoplay loop muted playsinline webkit-playsinline class="absolute inset-0 w-full h-full object-contain md:object-cover z-0 opacity-100 bg-black md:bg-slate-100 accelerated">
             <source src="bg_video.mp4" id="master-bg-video" type="video/mp4">
             <source src="https://cdn.pixabay.com/video/2021/08/04/83866-584746682_large.mp4" type="video/mp4">
         </video>
@@ -237,11 +237,13 @@
                     <div class="lg:col-span-2 bg-white rounded-[2.5rem] p-10 border border-slate-200 flex flex-col items-center justify-center text-center shadow-lg">
                         <h3 id="selected-store-name" class="text-3xl font-black mb-3 text-slate-900 tracking-tighter">매장을 선택해 주세요</h3>
                         <div class="w-full bg-slate-100 border border-slate-200 rounded-[2rem] aspect-video flex flex-col items-center justify-center relative overflow-hidden group shadow-inner mt-4">
-                            <i class="fas fa-route text-6xl text-slate-300"></i>
-                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 text-left bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-slate-200 hidden animate-up shadow-md"><p id="map-box-addr" class="text-xs text-slate-900 font-black"></p></div>
+                            <!-- [🔥 Apply] 실시간 약도(지도) 화면 표시 (보안 정책상 구글맵 엔진 사용) -->
+                            <iframe id="map-iframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen loading="lazy" src=""></iframe>
+                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 text-left bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-slate-200 hidden animate-up shadow-md pointer-events-none"><p id="map-box-addr" class="text-xs text-slate-900 font-black"></p></div>
                         </div>
                         <div class="flex gap-4 w-full mt-10">
-                            <button onclick="window.open('https://map.kakao.com/')" class="flex-1 py-5 bg-[#FAE100] text-black rounded-3xl font-black uppercase text-sm shadow-md active:scale-95 transition-transform italic">지도로 보기</button>
+                            <!-- [🔥 Apply] 네이버 지도 바로가기 버튼으로 변경 -->
+                            <button onclick="openNaverMap()" class="flex-1 py-5 bg-[#03C75A] text-white rounded-3xl font-black uppercase text-sm shadow-md active:scale-95 transition-transform italic">네이버 지도로 보기</button>
                             <button onclick="callCurrentStore()" class="flex-1 py-5 bg-slate-900 text-white rounded-3xl font-black text-sm uppercase italic hover:bg-magenta transition-colors active:scale-95">매장 전화</button>
                         </div>
                     </div>
@@ -459,26 +461,31 @@
 
     <script>
         const storeData = [
-            { name: "상록롯데마트점 (본부)", dist: "상록구", tel: "010-7711-9870", addr: "성포동 586 롯데마트 1층" },
-            { name: "안산 중앙 통합역점", dist: "단원구", tel: "031-482-0000", addr: "단원구 고잔동 541" },
-            { name: "상록수역 광역거점", dist: "상록구", tel: "031-417-0000", addr: "상록구 본오동 877-1" },
-            { name: "고잔신도시 프리미엄", dist: "단원구", tel: "031-411-0000", addr: "단원구 고잔동 771" },
-            { name: "시흥 배곧 다이렉트", dist: "시흥시", tel: "031-498-0000", addr: "배곧동 192" },
-            { name: "부천 상동 통합점", dist: "부천시", tel: "032-322-0000", addr: "상동 541-1" },
-            { name: "부천 중동 거점센터", dist: "부천시", tel: "032-665-0000", addr: "중동 1141" },
-            { name: "수원 영통 프리미엄", dist: "수원시", tel: "031-205-0000", addr: "영통동 998-1" },
-            { name: "수원 인계 거점점", dist: "수원시", tel: "031-233-0000", addr: "인계동 1113" },
-            { name: "안양 범계 프리미엄", dist: "안양시", tel: "031-381-0000", addr: "동안구 호계동 1045" },
-            { name: "광명 소하 거점점", dist: "광명시", tel: "02-899-0000", addr: "소하동 1343" },
-            { name: "성남 판교 다이렉트", dist: "성남시", tel: "031-707-0000", addr: "삼평동 670" },
-            { name: "화성 새솔 통합점", dist: "화성시", tel: "031-355-0000", addr: "수노을중앙로 142" },
-            { name: "인천 송도 테크노점", dist: "인천시", tel: "032-811-0000", addr: "송도동 172-1" },
-            { name: "인천 논현 역전점", dist: "인천시", tel: "032-424-0000", addr: "논현동 632" },
-            { name: "군포 산본 역전점", dist: "군포시", tel: "031-395-0000", addr: "산본동 1142" },
-            { name: "의왕 내손 통합센터", dist: "의왕시", tel: "031-422-0000", addr: "내손동 753" },
-            { name: "용인 기흥 통합센터", dist: "용인시", tel: "031-282-0000", addr: "구갈동 354" },
-            { name: "용인 수지 역전점", dist: "용인시", tel: "031-262-0000", addr: "풍덕천동 712" },
-            { name: "과천 다이렉트점", dist: "과천시", tel: "02-502-0000", addr: "별양동 1-15" }
+            { name: "엠씨 본점 사무실", dist: "안산 단원", tel: "031-401-9018", addr: "안산시 단원구 고잔로 108, 대동조이월드 12층" },
+            { name: "광림프라자점", dist: "군포 산본", tel: "031-393-9019", addr: "군포시 산본로 323번길 16-15, 광림빌딩 1층" },
+            { name: "동명상가점", dist: "안산 단원", tel: "031-401-9019", addr: "안산시 단원구 선부광장1로 82, 1층" },
+            { name: "상록롯데마트점", dist: "안산 상록", tel: "031-8042-7018", addr: "안산시 상록구 샘골로 147, 1층" },
+            { name: "산본시장점", dist: "군포 산본", tel: "031-360-7019", addr: "군포시 금산로 94, 1층" },
+            { name: "장곡 신협점", dist: "시흥 장곡", tel: "031-401-6019", addr: "시흥시 진말로9번길 2, 1층" },
+            { name: "선부 롯데마트점", dist: "안산 단원", tel: "070-8225-9019", addr: "안산시 단원구 달미로 75, 1층" },
+            { name: "고잔 신한은행점", dist: "안산 단원", tel: "031-414-9019", addr: "안산시 단원구 광덕동로 61, 1층" },
+            { name: "월피주공점", dist: "안산 상록", tel: "031-439-6019", addr: "안산시 상록구 충장로 572-1, 1층" },
+            { name: "일동 GS25점", dist: "안산 상록", tel: "031-401-7019", addr: "안산시 상록구 도매시장로 119, 1층" },
+            { name: "이동 파리바게뜨점", dist: "안산 상록", tel: "031-407-9019", addr: "안산시 상록구 도매시장로 37, 1층" },
+            { name: "삼미시장 3호점", dist: "시흥 신천", tel: "031-439-7019", addr: "시흥시 삼미시장1길 17, 1층" },
+            { name: "와동점", dist: "안산 단원", tel: "031-439-9019", addr: "안산시 단원구 와동공원로 121, 1층" },
+            { name: "원곡 행정복지센터점", dist: "안산 단원", tel: "031-311-9019", addr: "안산시 단원구 원곡로 44, 1층" },
+            { name: "병점 진안점", dist: "화성 병점", tel: "031-221-9019", addr: "화성시 효행로 1060, 1층" },
+            { name: "청계 동탄점", dist: "화성 동탄", tel: "070-4001-9019", addr: "화성시 동탄대로시범길 142, 1층" },
+            { name: "동탄호수공원점", dist: "화성 동탄", tel: "070-7543-1888", addr: "화성시 동탄순환대로 127-5, 1층" },
+            { name: "병점 태안점", dist: "화성 병점", tel: "031-895-4019", addr: "화성시 병점2로 38, 1층" },
+            { name: "역곡점", dist: "부천 역곡", tel: "032-724-8019", addr: "부천시 원미구 역곡로7, 1층" },
+            { name: "모래내시장역점", dist: "인천 남동", tel: "032-468-8019", addr: "인천광역시 남동구 호구포로818" },
+            { name: "논현 아이플렉스점", dist: "인천 남동", tel: "070-4645-4563", addr: "인천광역시 남동구 논고개로123번길 17" },
+            { name: "논현 라페스타점", dist: "인천 남동", tel: "032-433-8019", addr: "인천광역시 남동구 논고개로71" },
+            { name: "도당점", dist: "부천 도당", tel: "070-4068-8019", addr: "부천시 원미구 옥산로 153, 1층" },
+            { name: "만수로점", dist: "인천 남동", tel: "070-4833-9625", addr: "인천광역시 남동구 만수로47" },
+            { name: "중동시장점", dist: "부천 중동", tel: "070-4078-8019", addr: "부천시 원미구 부흥로 197, 1층" }
         ];
 
         /* S26 울트라 1번 배치 고정 및 상세 배너 이미지 연결 */
@@ -633,10 +640,27 @@
             document.getElementById('selected-store-name').innerText = selectedStore.name;
             document.getElementById('map-box-addr').innerText = selectedStore.addr;
             document.getElementById('store-addr-tag').classList.remove('hidden');
+            
+            // [🔥 Apply] 선택된 매장의 주소로 지도 화면 자동 갱신
+            const mapIframe = document.getElementById('map-iframe');
+            if(mapIframe) {
+                // 구글맵 검색 쿼리를 이용한 간편 임베드 (별도 API 키 불필요)
+                mapIframe.src = `https://maps.google.com/maps?q=${encodeURIComponent(selectedStore.addr + ' ' + selectedStore.name)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+            }
+            
             renderStoresList();
         }
 
         function filterStores() { renderStoresList(); }
+
+        // [🔥 Apply] 버튼 클릭 시 네이버 지도 검색창으로 이동
+        function openNaverMap() {
+            if(selectedStore) {
+                // 네이버 지도 통합 검색 링크 (주소 + 매장명)
+                const searchUrl = `https://map.naver.com/p/search/${encodeURIComponent(selectedStore.addr + ' ' + selectedStore.name)}`;
+                window.open(searchUrl, '_blank');
+            }
+        }
 
         function openCallModal() {
             const container = document.getElementById('call-list-container');

@@ -32,8 +32,13 @@
         .accelerated { transform: translate3d(0, 0, 0); backface-visibility: hidden; perspective: 1000px; }
         @keyframes pulse-soft { 0%, 100% { opacity: 1; transform: translate3d(0,0,0); } 50% { opacity: 0.7; transform: translate3d(0,0,0); } }
         .animate-pulse-soft { animation: pulse-soft 3s infinite; will-change: opacity; }
+        
         @keyframes slide-up { from { transform: translate3d(0, 20px, 0); opacity: 0; } to { transform: translate3d(0, 0, 0); opacity: 1; } }
         .animate-up { animation: slide-up 0.4s ease-out forwards; will-change: transform, opacity; }
+
+        /* [🔥 Apply] 위에서 아래로 떨어지는 애니메이션 추가 */
+        @keyframes slide-down { from { transform: translate3d(0, -30px, 0); opacity: 0; } to { transform: translate3d(0, 0, 0); opacity: 1; } }
+        .animate-down { animation: slide-down 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards; will-change: transform, opacity; }
 
         /* [푸터 전용] 하단 까만 영역용 화이트 로고 클래스 유지 */
         .simply-logo-container { display: flex; align-items: baseline; justify-content: center; gap: 4px; white-space: nowrap; flex-wrap: nowrap; }
@@ -72,13 +77,16 @@
         
         /* 모달 시스템 */
         .modal-overlay { background-color: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 1000; position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
-        .modal-content { background: white; width: 100%; max-width: 1100px; border-radius: 2.5rem; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        
+        /* [🔥 Apply] 모달 폭을 세로형에 맞게 대폭 축소 (1100px -> 520px) */
+        .modal-content { background: white; width: 100%; max-width: 520px; border-radius: 2.5rem; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        
         .modal-content-call { background: white; width: 100%; max-width: 450px; border-radius: 2.5rem; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
         .thumb-item { border: 1.5px solid #E5E7EB; transition: all 0.3s; cursor: pointer; border-radius: 0.75rem; overflow: hidden; padding: 2px; background: white; width: 3.5rem; height: 3.5rem; flex-shrink: 0; }
         .thumb-item.active { border-color: var(--uplus-magenta); transform: scale(1.1); box-shadow: 0 4px 15px rgba(255, 0, 160, 0.2); }
     </style>
 </head>
-<body class="text-slate-900 pb-24 text-left">
+<body class="text-slate-900 pb-24 text-left bg-gray-50">
 
     <!-- [고정] 1. 게이트웨이 -->
     <div id="gateway" class="fixed inset-0 z-[700] flex flex-col items-center justify-center p-6 transition-all duration-700 bg-white overflow-hidden text-center">
@@ -237,12 +245,12 @@
                     <div class="lg:col-span-2 bg-white rounded-[2.5rem] p-10 border border-slate-200 flex flex-col items-center justify-center text-center shadow-lg">
                         <h3 id="selected-store-name" class="text-3xl font-black mb-3 text-slate-900 tracking-tighter">매장을 선택해 주세요</h3>
                         <div class="w-full bg-slate-100 border border-slate-200 rounded-[2rem] aspect-video flex flex-col items-center justify-center relative overflow-hidden group shadow-inner mt-4">
-                            <!-- [🔥 Apply] 실시간 약도(지도) 화면 표시 (보안 정책상 구글맵 엔진 사용) -->
+                            <!-- 실시간 약도(지도) 화면 표시 -->
                             <iframe id="map-iframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen loading="lazy" src=""></iframe>
-                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 text-left bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-slate-200 hidden animate-up shadow-md pointer-events-none"><p id="map-box-addr" class="text-xs text-slate-900 font-black"></p></div>
+                            <div id="store-addr-tag" class="absolute bottom-6 left-6 right-6 text-left bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-slate-200 hidden shadow-md pointer-events-none"><p id="map-box-addr" class="text-xs text-slate-900 font-black"></p></div>
                         </div>
                         <div class="flex gap-4 w-full mt-10">
-                            <!-- [🔥 Apply] 네이버 지도 바로가기 버튼으로 변경 -->
+                            <!-- 네이버 지도 바로가기 버튼 -->
                             <button onclick="openNaverMap()" class="flex-1 py-5 bg-[#03C75A] text-white rounded-3xl font-black uppercase text-sm shadow-md active:scale-95 transition-transform italic">네이버 지도로 보기</button>
                             <button onclick="callCurrentStore()" class="flex-1 py-5 bg-slate-900 text-white rounded-3xl font-black text-sm uppercase italic hover:bg-magenta transition-colors active:scale-95">매장 전화</button>
                         </div>
@@ -274,7 +282,6 @@
                     <p>고객센터 : 휴대폰 114(무료) 1544-0010(유료) <span class="mx-2 text-white/10">|</span> 인터넷/IPTV/전화 101(무료) 1644-7000(유료)</p>
                 </div>
                 <div class="flex justify-between items-center pt-8 border-t border-white/5 text-left">
-                    <!-- 하단 푸터는 까만 배경이므로, 기존의 하얀색 글씨+SVG 코드를 그대로 유지합니다 -->
                     <div class="simply-logo-container text-sm" style="justify-content: flex-start; gap: 4px; opacity: 0.4;">
                         <span class="simply-text-main text-white">Simply.</span>
                         <svg class="simply-u-svg text-white" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
@@ -295,26 +302,28 @@
         </div>
     </div>
 
-    <!-- [🔥 대개편] 상세 모달 (공식 U+ 다이렉트 UI 완벽 카피) -->
-    <div id="specModal" class="modal-overlay accelerated" onclick="closeModal()">
-        <div class="modal-content relative animate-up text-left flex flex-col w-full max-w-[1000px] max-h-[90vh]" onclick="event.stopPropagation()">
+    <!-- [🔥 대개편] 상세 모달 (1단 세로 스크롤 레이아웃 & 위에서 아래로 떨어지는 애니메이션) -->
+    <div id="specModal" class="modal-overlay" onclick="closeModal()">
+        <!-- animate-down 적용, max-w를 520px로 제한하여 PC에서도 모바일/영수증 스타일 유지 -->
+        <div class="modal-content animate-down text-left flex flex-col" onclick="event.stopPropagation()">
             
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-slate-800 z-[60] shadow-md active:scale-90 transition-transform">
+            <!-- 닫기 버튼을 컨텐츠 안쪽에 고정 배치 -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center text-slate-800 z-[60] shadow-sm active:scale-90 transition-transform">
                 <i class="fas fa-times text-sm"></i>
             </button>
 
-            <!-- 동시 스크롤 영역 -->
-            <div id="modalScrollArea" class="flex-1 overflow-y-auto no-scrollbar w-full bg-white">
-                <div class="flex flex-col md:flex-row w-full">
-                    <!-- 좌측 이미지 영역 -->
-                    <div class="w-full md:w-[45%] bg-[#F8F9FA] flex-shrink-0 md:border-r border-slate-100 relative h-[300px] md:h-auto flex flex-col items-center justify-center p-6">
-                    <span class="absolute top-6 left-6 bg-[#E63900] text-white px-2 py-1 text-[10px] font-bold">인기</span>
-                    <div id="modalParallaxBg" class="w-full h-full max-h-[400px] bg-contain bg-no-repeat bg-center transition-opacity duration-300" style="background-color: transparent;"></div>
-                    <div class="absolute bottom-6 flex gap-2 z-20" id="modal-thumb-list"></div>
+            <!-- 동시 스크롤 영역 (전체 1단 구조) -->
+            <div id="modalScrollArea" class="flex-1 overflow-y-auto no-scrollbar w-full bg-white flex flex-col">
+                
+                <!-- 상단: 이미지 영역 (가로 너비 100%) -->
+                <div class="w-full bg-[#F8F9FA] relative h-[320px] flex flex-col items-center justify-center p-6 border-b border-slate-100">
+                    <span class="absolute top-6 left-6 bg-[#E63900] text-white px-2 py-1 text-[10px] font-bold z-10">인기</span>
+                    <div id="modalParallaxBg" class="w-full h-full bg-contain bg-no-repeat bg-center transition-opacity duration-300 relative z-0" style="background-color: transparent;"></div>
+                    <div class="absolute bottom-6 flex justify-center gap-2 w-full z-20" id="modal-thumb-list"></div>
                 </div>
                 
-                <!-- 우측 공식몰 스타일 UI 영역 -->
-                <div class="w-full md:w-[55%] bg-white flex flex-col p-6 md:p-8">
+                <!-- 중단: 공식몰 스타일 UI 영역 (옵션 + 요금계산기) -->
+                <div class="w-full bg-white flex flex-col p-6">
                     
                     <div class="text-center mb-6">
                         <h3 id="modalTitle" class="text-2xl md:text-3xl font-black tracking-tighter mb-4 text-slate-900">MODEL NAME</h3>
@@ -421,13 +430,13 @@
                     </div>
                 </div>
                 
-                <!-- [🔥 Apply] 기기 상세 프로모션 배너 영역 (S26 울트라 전용) -->
-                <div id="detailBannerArea" class="w-full hidden bg-white">
+                <!-- 하단: 기기 상세 프로모션 배너 영역 (옵션 아래로 스크롤 시 등장) -->
+                <div id="detailBannerArea" class="w-full hidden bg-[#F8F9FA] border-t border-slate-100">
                     <img id="detailBannerImg" src="" alt="기기 상세 혜택" class="w-full h-auto block">
                 </div>
             </div>
 
-            <!-- 하단 고정 예약 버튼 (이미지 캡처본 스타일) -->
+            <!-- 하단 고정 예약 버튼 -->
             <div class="w-full p-4 bg-white border-t border-slate-100 flex gap-2 z-50 flex-shrink-0 rounded-b-[2.5rem]">
                 <button class="w-14 h-14 bg-white border border-gray-300 text-slate-800 rounded-xl flex items-center justify-center font-bold text-xs hover:bg-gray-50">
                     비교
@@ -460,9 +469,8 @@
     </div>
 
     <script>
-        // [🔥 Apply] 모바일 기기 하드웨어 뒤로가기 버튼 연동 (History API)
+        // 모바일 기기 하드웨어 뒤로가기 버튼 연동 (History API)
         window.addEventListener('popstate', function() {
-            // 뒤로가기가 눌렸을 때 열려있는 모든 모달과 메뉴를 강제로 닫음
             document.getElementById('specModal').style.display = 'none';
             document.getElementById('callModal').style.display = 'none';
             document.getElementById('msgBox').style.display = 'none';
@@ -470,17 +478,14 @@
             document.body.style.overflow = 'auto';
         });
 
-        // 창이 열릴 때 가상의 히스토리를 쌓는 함수
         function pushModalState() { 
             history.pushState({ modalOpen: true }, null, location.href); 
         }
 
-        // 창이 닫힐 때 히스토리를 빼거나 화면을 정리하는 함수
         function popModalState() { 
             if (history.state && history.state.modalOpen) { 
-                history.back(); // 시스템 뒤로가기를 호출하여 자연스럽게 닫힘
+                history.back(); 
             } else {
-                // 비정상적인 상태일 경우 수동으로 모든 창 숨김 처리
                 document.getElementById('specModal').style.display = 'none';
                 document.getElementById('callModal').style.display = 'none';
                 document.getElementById('msgBox').style.display = 'none';
@@ -517,7 +522,6 @@
             { name: "중동시장점", dist: "부천 중동", tel: "070-4078-8019", addr: "부천시 원미구 부흥로 197, 1층" }
         ];
 
-        /* S26 울트라 1번 배치 고정 및 상세 배너 이미지 연결 */
         const deviceData = [
             { id: 1, brand: 'samsung', name: 'Galaxy S26 Ultra', sub: 'AI 모바일의 혁명적 진화', image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80', badge: '추천', basePrice: 145000, deviceMonthly: 68000, discount: 25000, detailImage: '20260225-014611-287-wJk7reTi.jpg' },
             { id: 2, brand: 'apple', name: 'iPhone 17 Pro', sub: '프로 성능의 절정에 서다', image: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=600&q=80', badge: '최신', basePrice: 155000, deviceMonthly: 78000, discount: 20000 },
@@ -588,14 +592,12 @@
         function setupSwipe() {
             const root = document.getElementById('slider-root');
             
-            // Mobile Touch
             root.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
             root.addEventListener('touchend', e => {
                 endX = e.changedTouches[0].clientX;
                 handleSwipe();
             }, {passive: true});
 
-            // PC Mouse Drag
             root.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
             root.addEventListener('mouseleave', () => { isDragging = false; });
             root.addEventListener('mouseup', e => {
@@ -670,10 +672,8 @@
             document.getElementById('map-box-addr').innerText = selectedStore.addr;
             document.getElementById('store-addr-tag').classList.remove('hidden');
             
-            // [🔥 Apply] 선택된 매장의 주소로 지도 화면 자동 갱신
             const mapIframe = document.getElementById('map-iframe');
             if(mapIframe) {
-                // 구글맵 검색 쿼리를 이용한 간편 임베드 (별도 API 키 불필요)
                 mapIframe.src = `https://maps.google.com/maps?q=${encodeURIComponent(selectedStore.addr + ' ' + selectedStore.name)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
             }
             
@@ -682,17 +682,15 @@
 
         function filterStores() { renderStoresList(); }
 
-        // [🔥 Apply] 버튼 클릭 시 네이버 지도 검색창으로 이동
         function openNaverMap() {
             if(selectedStore) {
-                // 네이버 지도 통합 검색 링크 (주소 + 매장명)
                 const searchUrl = `https://map.naver.com/p/search/${encodeURIComponent(selectedStore.addr + ' ' + selectedStore.name)}`;
                 window.open(searchUrl, '_blank');
             }
         }
 
         function openCallModal() {
-            pushModalState(); // 히스토리 스택 추가
+            pushModalState();
             const container = document.getElementById('call-list-container');
             container.innerHTML = storeData.map(s => `
                 <div onclick="window.location.href='tel:${s.tel}'" class="p-5 bg-white border border-slate-100 rounded-2xl flex justify-between items-center cursor-pointer active:bg-slate-50 shadow-sm text-left">
@@ -705,13 +703,13 @@
         }
 
         function openSpecModal(id) {
-            pushModalState(); // 히스토리 스택 추가
+            pushModalState(); 
             currentDevice = deviceData.find(device => device.id === id);
             if(!currentDevice) return;
             
             const mBg = document.getElementById('modalParallaxBg'); 
             mBg.style.backgroundImage = `url('${currentDevice.image}')`; 
-            document.getElementById('modalTitle').innerText = currentDevice.name; // 공식몰처럼 대문자 변환 제거
+            document.getElementById('modalTitle').innerText = currentDevice.name; 
             
             const tList = document.getElementById('modal-thumb-list'); 
             tList.innerHTML = [currentDevice.image, currentDevice.image, currentDevice.image].map((url, idx) => `
@@ -724,7 +722,6 @@
             selectOption('month', '24'); 
             selectOption('type', 'move');
             
-            // 상세 배너 처리 및 스크롤 초기화
             const detailBannerArea = document.getElementById('detailBannerArea');
             const detailBannerImg = document.getElementById('detailBannerImg');
             const modalScrollArea = document.getElementById('modalScrollArea');
@@ -800,18 +797,16 @@
             const isMove = document.getElementById('type-move')?.classList.contains('text-magenta');
             const isNew = document.getElementById('type-new')?.classList.contains('text-magenta');
 
-            // 요금제 기본값 (시그니처)
             let planOriginal = 105000;
             let planDiscount = 56500;
             let planFinal = planOriginal - planDiscount;
             
-            // 기기값 계산
             let capAdd = is1TB ? 24000 : (is512 ? 12000 : 0);
             let baseDeviceVal24 = currentDevice.deviceMonthly + capAdd;
             let totalDevicePrice = baseDeviceVal24 * 24; 
             
             let months = is36Month ? 36 : 24;
-            let deviceOriginalMonthly = Math.round((totalDevicePrice + 200000) / months); // 할인 전 가상 월납부
+            let deviceOriginalMonthly = Math.round((totalDevicePrice + 200000) / months); 
             
             let discountVal = currentDevice.discount; 
             let typeLabel = "기기변경";
@@ -819,7 +814,6 @@
             if (isMove) { discountVal += 15000; typeLabel = "번호이동"; } 
             else if (isNew) { discountVal += 5000; typeLabel = "신규가입"; } 
             
-            // 휴대폰 월 할인액 적용
             let deviceDiscountMonthly = Math.round(discountVal / 2); 
             let deviceFinalMonthly = deviceOriginalMonthly - deviceDiscountMonthly;
 
@@ -829,7 +823,6 @@
                 setTimeout(() => { calcBox.style.opacity = '1'; }, 200);
             }
 
-            // 휴대폰 내역
             document.getElementById('calc-device-original').innerText = deviceOriginalMonthly.toLocaleString();
             document.getElementById('calc-device').innerText = deviceFinalMonthly.toLocaleString() + "원/월";
             document.getElementById('calc-device-discount').innerText = "-" + deviceDiscountMonthly.toLocaleString() + "원/월";
@@ -837,11 +830,9 @@
             document.getElementById('calc-total-device-original').innerText = (deviceOriginalMonthly * months).toLocaleString();
             document.getElementById('calc-total-device-discount').innerText = (deviceFinalMonthly * months).toLocaleString() + "원";
 
-            // 요금제 내역
             document.getElementById('calc-plan-discount').innerText = "-" + planDiscount.toLocaleString() + "원/월";
             document.getElementById('calc-type-label').innerText = typeLabel;
 
-            // 총 납부금액
             let originalTotal = deviceOriginalMonthly + planOriginal;
             let finalTotal = deviceFinalMonthly + planFinal;
             document.getElementById('calc-original-total').innerText = originalTotal.toLocaleString();
@@ -865,14 +856,13 @@
         
         function showMsgBox(t) { 
             document.getElementById('msgTxt').innerText = t; 
-            pushModalState(); // 히스토리 스택 추가
+            pushModalState(); 
             document.getElementById('msgBox').style.display = 'flex'; 
         }
         function closeMsgBox() { popModalState(); }
         
         function submitOrder() { 
-            popModalState(); // 상세 모달 먼저 닫기 (뒤로가기 처리 포함)
-            // 비동기 지연 후 완료 메시지 창 띄우기 (충돌 방지)
+            popModalState(); 
             setTimeout(() => {
                 showMsgBox('상담 예약이 접수되었습니다! 담당 실장님이 배정 중입니다.');
             }, 150);
